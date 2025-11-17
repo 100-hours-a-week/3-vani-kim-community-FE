@@ -1,10 +1,10 @@
-import apiClient from "/js/api/api.js";
+import apiClient from "/src/core/api/api.js";
 
 //회원가입 요청
 export async function signup(email, password, nickname, profileImageKey) {
     try {
         const response = await apiClient.post(`/auth/users`, {
-            email,                      // 동일하면 그냥 써도 된다
+            email,
             password,
             nickname,
             profileImageKey
@@ -36,6 +36,7 @@ export async function login(email, password) {
 }
 
 // 로그아웃 요청
+// TODO 쿠키 삭제.
 export async function logout() {
     try {
         const response = await apiClient.post(`/auth/logout`);
@@ -60,6 +61,7 @@ export async function emailCheck(email) {
         throw error;
     }
 }
+
 //닉네임 중복 검증
 export async function nicknameCheck(nickname) {
     try {
