@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시글</title>
+    <link rel="stylesheet" type="text/css" href="/src/features/posts/pages/detail/post.css">
+    <link rel="stylesheet" href="/src/shared/component/layout.css">
+
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/src/core/api/api.js" type="module"></script>
+    <script src="/src/features/auth/authStore.js"></script>
+    <script src="/src/features/posts/pages/detail/postDetail.js" type="module"></script> <!--defer는 HTML파싱 후에 실행되도록 module타입에는 내장-->
+
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+
+        <article class="post" id="post-container">
+        <!--JS로 동적 렌더링 -->
+
+            <header class="post-header">
+                <h3 id="post-title"></h3>
+                <a href="#" class="post-author">
+                    <img src="/assets/user.png" alt="작성자 이미지">
+                    <span id="post-author-id"></span>
+                </a>
+                <time class="post-date" id="post-date" datetime=""></time>
+
+                <!--수정페이지로 이동 -->
+                <div class="post-actions" id="post-actions"></div>
+
+    <!--                <a href="/edit-post.html" class="button">수정</a>-->
+    <!--                <button type="button" onclick="checkDelete()">삭제</button>-->
+    <!--            </div>-->
+
+            </header>
+
+            <div class="post-content">
+                <!-- 확대 할 수 있어야할까?-->
+                <img src="" id="post-img" alt="">
+                <p id="post-body"></p>
+            </div>
+
+            <div class="post-stats">
+                <div class="post-likes-section">
+                    <button type="button" id="like-button">🤍 </button>
+                    <span id="post-likes">좋아요</span>
+                </div>
+                <div class="post-views" id="post-views">조회</div>
+                <div class="post-comments" id="post-comments">댓글</div>
+            </div>
+
+            <section class="post-comment">
+                <div class="comment-create">
+                    <input id="comment-input" placeholder="댓글을 입력하세요...">
+                    <button type="button" id="comment-submit-btn">등록</button>
+                </div>
+
+                <ul class="comment-list" id="comment-list"></ul>
+            </section>
+        </article>
+    </main>
+    <!--댓글은 반복적이니까 템플릿화해서 사용-->
+    <template id = "comment-template">
+        <li data-comment-id="" data-author-id="">
+            <div class="comment-header">
+                <a href="#" class="comment-author">
+                    <img src="/assets/user.png" alt="댓글 작성자 이미지">
+                    <span class="author-id" id="author-nickname"></span>
+                </a>
+                <time class="comment-date" datetime=""></time>
+            </div>
+            <div class="comment-content" id="comment-content">
+                <p></p>
+            </div>
+
+            <div class="comment-actions">
+                <button type="button" class="more-btn">⁝</button>
+
+                <ul class="more-menu">
+                    <li><button type="button" class="report-btn">신고</button></li>
+                </ul>
+            </div>
+            <ul class="comment-list"></ul>
+            <div id="infinite-scroll-trigger" class="infinite-scroll"></div>
+        </li>
+    </template>
+    <div id="footer-placeholder"></div>
+
+</body>
+</html>

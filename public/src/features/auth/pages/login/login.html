@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" href="/src/features/auth/pages/login/login.css">
+    <link rel="stylesheet" href="/src/shared/component/layout.css">
+
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script src="/assets/lib/axios.min.js"></script>
+    <script src="/src/core/api/api.js" type="module"></script>
+    <script src="/src/features/auth/authStore.js"></script>
+    <script src="/src/features/auth/pages/login/login.js" type="module"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+
+    <main>
+        <h1>로그인</h1>
+
+        <form id = "login-form">
+            <div>
+                <label for="email">이메일</label> <br>
+                <input type="text" id="email" placeholder="이메일을 입력하세요">
+            </div>
+            <div>
+                <label for="password">비밀번호</label> <br> 
+                <input type="password" id="password" placeholder="비밀번호를 입력하세요">
+            </div>
+            <div>
+                <button type="submit" id="login-button">로그인</button>
+            </div>
+        </form> <div>
+                <a href="/signup">회원가입</a>
+            </div>
+    </main>
+    <div id="footer-placeholder"></div>
+
+</body>
+</html>

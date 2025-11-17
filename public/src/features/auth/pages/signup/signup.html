@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>signUpPage</title>
+    <link rel="stylesheet" type="text/css" href="/src/features/auth/pages/signup/signup.css">
+    <link rel="stylesheet" href="/src/shared/component/layout.css">
+
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/src/core/api/api.js"></script>
+    <script src="/src/features/auth/authStore.js"></script>
+    <script src="/src/features/auth/pages/signup/signup.js" type="module"></script>
+</head>
+
+<body>
+
+<div id="header-placeholder"></div>
+
+<div class="main-wrapper no-sidebar">
+
+    <main class="content">
+        <h2>회원가입</h2>
+        <form id="signup">
+            <div class="image-uploader">
+                <label for="image-input" class="image-upload-label">프로필 이미지
+                    <img class="image-preview" id="image-preview" src="assets/user.png" alt="프로파일 이미지 미리보기">
+                </label>
+                <input type="file" id="image-input" accept="image/*" class="visually-hidden">
+            </div>
+
+            <div>
+                <label for="email">이메일<span class="required">*</span></label>
+                <input type="email" id="email" name="email" required>
+                <p id="emailVerified" style="display: none;"> </p>
+            </div>
+
+            <div>
+                <label for="password">비밀번호<span class="required">*</span></label>
+                <input type="password" id="password" name="password" required>
+                <p id="passwordVerified" style="display: none;"> </p>
+            </div>
+
+            <div>
+                <label for="passwordConfirm">비밀번호 확인<span class="required">*</span></label>
+                <input type="password" id="passwordConfirm" name="passwordConfirm" required>
+                <p id="passwordConfirmVerified" style="display: none;"> </p>
+            </div>
+
+            <div>
+                <label for="nickname">닉네임<span class="required">*</span></label></label>
+                <input type="text" id="nickname" required>
+                <p id="nicknameVerified" style="display: none;"> </p>
+            </div>
+
+            <button type="submit" id="signup-button" disabled>회원가입</button>
+        </form>
+        <a href="/login" class="login-link">로그인하러가기</a>
+    </main>
+</div>
+
+<div id="footer-placeholder"></div>
+
+</body>
+</html>

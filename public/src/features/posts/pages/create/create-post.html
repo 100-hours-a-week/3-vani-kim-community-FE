@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 작성</title>
+    <link rel="stylesheet" type="text/css" href="/src/features/posts/pages/create/create-post.css">
+    <link rel="stylesheet" href="/src/shared/component/layout.css">
+
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="/src/core/api/api.js"></script>
+    <script src="/src/features/auth/authStore.js"></script>
+    <script src="/src/features/posts/pages/create/create-post.js" type="module"></script>
+</head>
+<body>
+<div id="header-placeholder"></div>
+    <!-- TODO 여러이미지 업로드 -->
+    <main>
+        <h3>게시글 작성</h3>
+        <form class="post-form" id="post-form" enctype="multipart/form-data">
+            <div class="post-form-group">
+                <label for="title">제목<span class="required">*</span></label>
+                <input type="text" id="title" name="title" placeholder="제목을 입력해주세요 최대 100자">
+            </div>
+
+            <div class="post-form-group">
+                <label>내용<span class="required">*</span></label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            <div class="post-image-upload">
+                <label class="image-upload-label" for="image-input">이미지
+                    <img class="image-preview" id="image-preview" src="assets/user.png" alt="프로파일 이미지 미리보기">
+                    <span class="upload-text">클릭하여 이미지 업로드</span>
+                </label>
+
+                <input type="file" id="image-input" name="image" accept="image/*" style="display: none;">
+            </div>
+
+
+            <div class="btn-container">
+                <button type="submit" class="post-submit">완료</button>
+            </div>
+        </form>
+    </main>
+<div id="footer-placeholder"></div>
+</body>
+</html>

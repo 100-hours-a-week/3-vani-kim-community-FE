@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아무말 대잔치</title>
-    <link rel="stylesheet" type="text/css" href="./css/post-item.css">
-    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/src/shared/component/layout.css">
+    <link rel="stylesheet" href="/index.css">
 
-
-    <script type="module" src="/js/pages/common.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/js/api/api.js" type="module"></script>
-    <script src="/js/pages/index.js" type="module"></script>
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script type="module" src="/index.js" defer></script>
+    <script src="/assets/lib/axios.min.js"></script>
+    <script src="/src/core/api/api.js" type="module"></script>
+    <script src="/src/features/auth/authStore.js"></script>
 
 </head>
 <body>
@@ -27,9 +27,9 @@
 
             <ul class="post-list-container">
                 </ul>
-            <div id="infinite-scroll-trigger"></div>
+            <div id="infinite-scroll-trigger" class="infinite-scroll-trigger"></div>
 
-            <div id="end-of-list-message">
+            <div id="end-of-list-message" class="end-of-list-message">
                 <p>모든 게시글을 불러왔습니다.</p>
             </div>
         </div>
@@ -51,7 +51,6 @@
                     </div>
                 </div>
                 <footer class="author-area">
-<!--                    TODO s3문제 해결해야함-->
                     <span class="author-nickname">작성자</span>
                 </footer>
             </a>
