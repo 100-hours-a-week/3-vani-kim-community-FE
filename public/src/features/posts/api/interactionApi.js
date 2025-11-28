@@ -2,7 +2,7 @@ import apiClient from "/src/core/api/api.js";
 
 export async function like(postId){
     try {
-        const response = await apiClient.post(`/post/${postId}/likes`, {
+        const response = await apiClient.post(`/posts/${postId}/likes`, {
             params: {
                 postId
             }
