@@ -1,8 +1,8 @@
-import apiClient from "/src/core/api/api.js";
+import lambdaClient from "/src/core/api/lambdaClient.js";
 
 export async function getPresignTempUrl(fileName, contentType, fileSizeByte, category){
     try{
-        const response = await apiClient.post(`/uploads/presign/temp`, {
+        const response = await lambdaClient.post(`/uploads/presign/temp`, {
             fileName,
             contentType,
             fileSizeByte,
@@ -17,7 +17,7 @@ export async function getPresignTempUrl(fileName, contentType, fileSizeByte, cat
 
 export async function getPresignUrl(fileName, contentType, fileSizeByte, category){
     try{
-        const response = await apiClient.post(`/uploads/presign`, {
+        const response = await lambdaClient.post(`/uploads/presign`, {
                 fileName,
                 contentType,
                 fileSizeByte,
