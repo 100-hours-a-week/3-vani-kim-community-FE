@@ -21,11 +21,19 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         const response = await login(emailValue, passwordValue);
         console.log('로그인 응답:', response);
 
+        if (!response?.authHeader) {
+            throw new Error('토큰을 받지 못했습니다.');
+        }
+
         // 2. Authorization 헤더에서 Bearer 토큰 추출
         const authHeader = response.authHeader;
         let newAccessToken;
         if (authHeader && authHeader.startsWith('Bearer ')) {
             newAccessToken = authHeader.split('Bearer ')[1];
+        }
+
+        if (!newAccessToken) {
+            throw new Error('유효하지 않은 토큰 형식입니다.');
         }
 
         // 3. authStore에 토큰 저장
@@ -36,11 +44,17 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
         // 4. 토큰이 설정된 후 사용자 전체 정보 조회
         // (getUser는 내부적으로 accessToken을 사용하여 /users/me 호출)
-        const userData = await getUser();
-        console.log('사용자 정보 조회 완료:', userData);
-
-        // 5. authStore에 사용자 정보 저장
-        window.authStore.setUser(userData);
+        try {
+            const userData = await getUser();
+            window.authStore.setUser(userData);
+            console.log('사용자 정보 조회 완료:', userData);
+        } catch (userError) {
+            console.warn('사용자 정보 조회 실패, 기본 정보만 저장:', userError);
+            // 기본 정보만 저장
+            window.authStore.setUser({
+                nickname: response.nickname
+            });
+        }
 
         // 6. 로그인 성공 알림
         alert('로그인 성공');
@@ -53,7 +67,11 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
 
     } catch (error) {
         console.error('로그인 실패:', error);
-        alert('이메일 또는 비밀번호 오류');
+        if (error.response?.status === 401) {
+            alert('이메일 또는 비밀번호가 올바르지 않습니다.');
+        } else {
+            alert('로그인 중 오류가 발생했습니다.');
+        }
     }
 });
 
