@@ -53,7 +53,7 @@ jobs:
 
       # CodeDeploy용 스크립트 압축
       - name: Make Zip File for CodeDeploy
-        run: zip -r deployment.zip appspec.yml scripts
+        run: zip -r deployment.zip appspec.yml ./scripts ./nginx
 
       # S3에 스크립트 업로드
       - name: Upload to S3
