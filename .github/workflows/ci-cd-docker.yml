@@ -3,8 +3,8 @@ name: Express Frontend CI/CD with Docker&CodeDeploy
 env:
     AWS_REGION: ${{ vars.AWS_REGION }}
     S3_BUCKET: ${{ vars.S3_BUCKET }}
-    CODEDEPLOY_APP: ${{ vars.CODEDEPLOY_EXPRESS_APP }}
-    CODEDEPLOY_GROUP: ${{ vars.CODEDEPLOY_EXPRESS_GROUP }}
+    CODEDEPLOY_EXPRESS_APP: ${{ vars.CODEDEPLOY_EXPRESS_APP }}
+    CODEDEPLOY_EXPRESS_GROUP: ${{ vars.CODEDEPLOY_EXPRESS_GROUP }}
     S3_KEY: express/deployment.zip
 
 on:
