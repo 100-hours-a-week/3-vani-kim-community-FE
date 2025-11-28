@@ -1,0 +1,70 @@
+name: Express Frontend CI/CD with Docker&CodeDeploy
+
+env:
+    AWS_REGION: ${{ vars.AWS_REGION }}
+    S3_BUCKET: ${{ vars.S3_BUCKET }}
+    CODEDEPLOY_APP: ${{ vars.CODEDEPLOY_EXPRESS_APP }}
+    CODEDEPLOY_GROUP: ${{ vars.CODEDEPLOY_EXPRESS_GROUP }}
+    S3_KEY: express/deployment.zip
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-22.04
+    steps:
+      # 소스코드
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # OIDC 인증
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.IAM_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ECR 로그인
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 도커 빌드 셋업
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 도커 이미지 빌드 & ECR 푸시
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/vani/express:latest
+          # github actions의 캐시 사용
+          cache-from: type=gha
+          cache-to: type=gha, mode=max
+
+      # CodeDeploy용 스크립트 압축
+      - name: Make Zip File for CodeDeploy
+        run: zip -r deployment.zip appspec.yml scripts
+
+      # S3에 스크립트 업로드
+      - name: Upload to S3
+        run: | 
+          aws s3 cp deployment.zip s3://$S3_BUCKET/$S3_KEY
+
+      # CodeDeploy 배포
+      - name: Trigger CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name $CODEDEPOLY_EXPRESS_APP \
+            --deployment-group-name $CODEDEPOLY_EXPRESS_GROUP \
+            --s3-location bucket=$S3_BUCKET,key=$S3_KEY,bundleType=zip \
+            --description "Commit SHA: ${{ github.sha }}"

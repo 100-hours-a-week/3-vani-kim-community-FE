@@ -8,6 +8,8 @@
 **/.dockerignore
 **/.env
 **/.git
+.github
+config
 **/.gitignore
 **/.project
 **/.settings
@@ -32,3 +34,5 @@
 **/dist
 LICENSE
 README.md
+
+Dockerfile*
