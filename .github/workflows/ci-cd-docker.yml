@@ -64,7 +64,7 @@ jobs:
       - name: Trigger CodeDeploy
         run: |
           aws deploy create-deployment \
-            --application-name $CODEDEPOLY_EXPRESS_APP \
-            --deployment-group-name $CODEDEPOLY_EXPRESS_GROUP \
+            --application-name $CODEDEPLOY_EXPRESS_APP \
+            --deployment-group-name $CODEDEPLOY_EXPRESS_GROUP \
             --s3-location bucket=$S3_BUCKET,key=$S3_KEY,bundleType=zip \
             --description "Commit SHA: ${{ github.sha }}"
