@@ -183,7 +183,6 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
 
     //입력으로 받은 이미지파일
     const imageFile = document.getElementById('image-input').files[0];
-    console.log(imageFile.name, imageFile.size, imageFile.type);
     //이미지 처리
     let profileImageKey = null;
 

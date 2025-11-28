@@ -21,7 +21,7 @@ imageInput.addEventListener('change', (event) => {
         renderImagePreview(null, imagePreview, DEFAULT_AVATAR_IMAGE);
         return;
     }
-
+    console.log("이미지 미리보기 시작")
     renderImagePreview(file, imagePreview, DEFAULT_AVATAR_IMAGE);
 });
 
