@@ -1,6 +1,6 @@
 services:
   app:
-    image: 658173955655.dkr.ecr.ap-northeast-2.amazonaws.com/vani/express:${IMAGE_TAG:-latest}
+    image: 658173955655.dkr.ecr.ap-northeast-2.amazonaws.com/vani/express:${IMAGE_TAG}
     restart: always
     environment:
       - NODE_ENV=production
