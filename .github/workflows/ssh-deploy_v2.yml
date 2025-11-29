@@ -93,5 +93,5 @@ jobs:
       - name: Start ASG Instance Refresh
         run: |
           aws autoscaling start-instance-refresh \
-          --auto-scaling-group-name "${{ env.FRONT_ASG_NAME }}"\
-          --preferences MinHealthyPercentage=50,InstanceWarmup=60
+          --auto-scaling-group-name "${{ env.FRONT_ASG_NAME }}" \
+          --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":60}'
