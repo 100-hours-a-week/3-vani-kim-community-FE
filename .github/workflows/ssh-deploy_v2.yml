@@ -2,13 +2,13 @@ name: Express Frontend CI/CD with Actions
 
 env:
   AWS_REGION: ${{ vars.AWS_REGION }}
-  S3_BUCKET: ${{ vars.S3_BUCKET }}
+  S3_BUCKET: ${{ vars.ACTIONS_S3_BUCKET }}
   S3_KEY: action/frontend/action_deployment.zip
-
+  FRONT_ASG_NAME: ${{ vars.FRONT_ASG_NAME }}
 on:
   push:
     branches:
-      - main
+      - features/onlyaction
 
 permissions:
   id-token: write
@@ -50,7 +50,11 @@ jobs:
       # 이미지 태그 생성
       - name: Create Image Tag
         id: image-tag
-        run: echo "TAG=sja-$(git rev-parse --short HEAD)" >> $GITHUB-OUTPUT
+        run: echo "TAG=sja-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      # ARM 빌드를 위한 QEMU
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       # 도커 빌드 셋업
       - name: Set up Docker Buildx
@@ -62,6 +66,8 @@ jobs:
         with:
           context: .
           push: true
+          platforms: linux/arm64
+          provenance: false
           tags: ${{ steps.login-ecr.outputs.registry }}/vani/express:${{ steps.image-tag.outputs.TAG }}
           # github actions의 캐시 사용
           cache-from: type=gha
@@ -71,8 +77,8 @@ jobs:
       - name: Update docker-compose.yml
         run: |
           export IMAGE_TAG=${{ steps.image-tag.outputs.TAG }}
-          envsubst < docker-compose.yml > depoly_compose.yml
-          cat depoly_compose.yml
+          envsubst < docker-compose.yml > deploy-compose.yml
+          mv deploy-compose.yml docker-compose.yml
 
       # 엔진엑스 설정과 docker-compose 압축
       - name: Make Zip File
@@ -87,5 +93,5 @@ jobs:
       - name: Start ASG Instance Refresh
         run: |
           aws autoscaling start-instance-refresh \
-          --auto-scaling-group-name "${{ secrets.ASG_NAME }}"\
+          --auto-scaling-group-name "${{ env.FRONT_ASG_NAME }}"\
           --preferences '{"MinHealthyPercentage": 50, "InstanceWarmup": 60}'
