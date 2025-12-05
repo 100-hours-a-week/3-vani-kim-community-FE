@@ -1,0 +1,23 @@
+services:
+  app:
+    image: 658173955655.dkr.ecr.ap-northeast-2.amazonaws.com/vani/express:${IMAGE_TAG}
+    restart: always
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - static-data:/app/public
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - static-data:/usr/share/nginx/html/public:ro
+    depends_on:
+      - app
+
+volumes:
+  static-data:

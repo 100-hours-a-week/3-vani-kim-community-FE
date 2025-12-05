@@ -1,0 +1,97 @@
+name: Express Frontend CI/CD with Actions
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  S3_BUCKET: ${{ vars.ACTIONS_S3_BUCKET }}
+  S3_KEY: action/frontend/action_deployment.zip
+  FRONT_ASG_NAME: ${{ vars.FRONT_ASG_NAME }}
+on:
+  push:
+    branches:
+      - features/onlyaction
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  Integration-test-and-deployment:
+    runs-on: ubuntu-22.04
+    steps:
+      # 소스코드
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 노드 설정
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # 통합 테스트
+      - name: Install & Test
+        run: |
+            npm ci
+            npm test
+
+      # OIDC 인증
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.IAM_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      # ECR 로그인
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 이미지 태그 생성
+      - name: Create Image Tag
+        id: image-tag
+        run: echo "TAG=sja-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      # ARM 빌드를 위한 QEMU
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      # 도커 빌드 셋업
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 도커 이미지 빌드 & ECR 푸시
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          platforms: linux/arm64
+          provenance: false
+          tags: ${{ steps.login-ecr.outputs.registry }}/vani/express:${{ steps.image-tag.outputs.TAG }}
+          # github actions의 캐시 사용
+          cache-from: type=gha
+          cache-to: type=gha, mode=max
+
+      # docker-compose에 tag 반영
+      - name: Update docker-compose.yml
+        run: |
+          export IMAGE_TAG=${{ steps.image-tag.outputs.TAG }}
+          envsubst < docker-compose.yml > deploy-compose.yml
+          mv deploy-compose.yml docker-compose.yml
+
+      # 엔진엑스 설정과 docker-compose 압축
+      - name: Make Zip File
+        run: zip -r deployment.zip docker-compose.yml ./nginx
+
+      # S3에 docker-compose 업로드
+      - name: Upload to S3
+        run: |
+          aws s3 cp deployment.zip s3://$S3_BUCKET/$S3_KEY
+
+      # ASG Refresh
+      - name: Start ASG Instance Refresh
+        run: |
+          aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name "${{ env.FRONT_ASG_NAME }}" \
+          --preferences '{"MinHealthyPercentage":50,"InstanceWarmup":60}'

@@ -56,3 +56,30 @@ app.use((req, res) => {
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
+
+const server = app.listen(port, () => {
+    if (process.send) {
+        process.send('ready');
+    }
+    console.log(`Listening on port ${port}`);
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT received. Closing sever...');
+
+    // 시간 제한 PM2 kill_timeout 보다 작게
+    setTimeout(() => {
+        console.error('Could not close connections in time, forcefully shutting down');
+        process.exit(1);
+    }, 8000);
+
+    // 기존 요청 처리
+    server.close((err) => {
+        if (err) {
+            console.error(err);
+            process.exit(1);
+        }
+        console.log('Sever closed.');
+        process.exit(0);
+    });
+});

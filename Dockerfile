@@ -20,15 +20,14 @@ ENV NODE_ENV=production
 
 # node_modules만
 COPY --from=builder /app/node_modules ./node_modules
-
 COPY package*.json ./
 
 # 소스 코드 복사
 COPY public ./public
 COPY server.js .
-
+COPY pm2/ecosystem.config.js .
 # 포트 노출
 EXPOSE 3000
 
 # 서버 실행
-CMD ["node", "server.js"]
+CMD ["./node_modules/.bin/pm2-runtime", "start", "ecosystem.config.js"]
