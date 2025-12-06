@@ -37,8 +37,8 @@ app.get('/user/me', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'user', 'pages', 'profile', 'user.html'));
 });
 
-app.get('/user/me/password', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'user', 'pages', 'settings', 'update-password.html'));
+app.get('/password', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'auth', 'pages', 'settings', 'update-password.html'));
 });
 
 app.get('/user/:userId', (req, res) => {

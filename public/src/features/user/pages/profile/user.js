@@ -1,4 +1,4 @@
-import {getUser, withdrawUser, updateUser, updatePassword} from "/src/features/user/api/userApi.js";
+import {getUser, withdrawUser, updateUser} from "/src/features/user/api/userApi.js";
 
 import {nicknameCheck} from "/src/features/auth/api/authApi.js";
 

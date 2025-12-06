@@ -47,7 +47,7 @@ export async function logout() {
     }
 }
 
-//이메일 중복 검증 TODO 다른 메서드 HEAD등 고민
+//이메일 중복 검증
 export async function emailCheck(email) {
     try {
         const response = await apiClient.get(`/auth/email`, {
@@ -73,6 +73,31 @@ export async function nicknameCheck(nickname) {
         return response;
     } catch (error) {
         console.error('닉네임 중복 검증 실패', error.message);
+        throw error;
+    }
+}
+
+//현재 비밀번호 검증
+export async function updatePassword(password) {
+    try {
+        const response = await apiClient.patch(`/auth/password`, {
+            password
+        });
+        return response;
+    } catch (error) {
+        console.error('비밀번호 변경 실패', error.message);
+        throw error;
+    }
+}
+
+export async function passwordCheck(password) {
+    try {
+        const response = await apiClient.post(`/auth/password`, {
+            password
+        });
+        return response;
+    } catch (error) {
+        console.error('비밀번호 검증 실패', error.message);
         throw error;
     }
 }

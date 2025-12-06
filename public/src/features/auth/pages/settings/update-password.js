@@ -1,4 +1,5 @@
 import apiClient from "/src/core/api/api.js";
+import { passwordCheck, updatePassword } from "/src/features/auth/api/authApi.js";
 
 const updatePasswordButton = document.getElementById('update-password-button');
 
@@ -17,23 +18,39 @@ function checkFormValidity() {
 const passwordRegex =
     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[ !"#$%&'()*+,-./:;<=>?@\[\]^_`{|}~])[A-Za-z\d !"#$%&'()*+,-./:;<=>?@\[\]^_`{|}~]{8,20}$/
 
-// 1. 현재 비밀번호 입력 검증
+// 1. 현재 비밀번호 입력 검증 (서버에서 실시간 확인)
 const currentPasswordInput = document.getElementById('current-password');
 const currentPasswordVerified = document.getElementById('currentPasswordVerified');
 
-currentPasswordInput.addEventListener('blur', (e) => {
+currentPasswordInput.addEventListener('blur', async (e) => {
     const currentPasswordValue = currentPasswordInput.value;
 
-    if (currentPasswordValue) {
-        currentPasswordVerified.textContent = '';
-        currentPasswordVerified.style.display = 'none';
-        validationState.currentPassword = true;
-    } else {
+    if (!currentPasswordValue) {
         currentPasswordVerified.textContent = '현재 비밀번호를 입력해주세요.';
+        currentPasswordVerified.classList.remove('success');
+        currentPasswordVerified.classList.add('error');
+        currentPasswordVerified.style.display = 'block';
+        validationState.currentPassword = false;
+        checkFormValidity();
+        return;
+    }
+
+    // 서버에 현재 비밀번호 확인 요청
+    try {
+        await passwordCheck(currentPasswordValue);
+        currentPasswordVerified.textContent = '현재 비밀번호가 확인되었습니다.';
+        currentPasswordVerified.classList.remove('error');
+        currentPasswordVerified.classList.add('success');
+        currentPasswordVerified.style.display = 'block';
+        validationState.currentPassword = true;
+    } catch (error) {
+        currentPasswordVerified.textContent = '현재 비밀번호가 올바르지 않습니다.';
+        currentPasswordVerified.classList.remove('success');
         currentPasswordVerified.classList.add('error');
         currentPasswordVerified.style.display = 'block';
         validationState.currentPassword = false;
     }
+
     checkFormValidity();
 });
 
@@ -118,11 +135,7 @@ document.getElementById('update-password-form').addEventListener('submit', async
 
     try {
         // 비밀번호 수정 API 호출
-        await apiClient.patch(`/auth/users/password`, {
-            currentPassword: currentPasswordValue,
-            newPassword: newPasswordValue,
-        });
-
+        await updatePassword(newPasswordValue);
         alert('비밀번호가 성공적으로 수정되었습니다.');
 
         // 토큰 삭제 및 로그인 페이지로 이동

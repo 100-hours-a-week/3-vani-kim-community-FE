@@ -120,22 +120,13 @@ input[readonly] {
     font-style: italic;
 }
 
-.password-section {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid #e9ecef;
-    margin-top: 20px;
-}
-
 .button-group {
     display: flex;
     gap: 10px;
     margin-top: 30px;
 }
 
-button[type="submit"],
-button[type="button"] {
+button[type="submit"] {
     flex: 1;
     padding: 12px;
     background-color: #007bff;
@@ -147,17 +138,30 @@ button[type="button"] {
     transition: background-color 0.2s ease;
 }
 
-button[type="submit"]:hover,
-button[type="button"]:hover {
+button[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-#change-password {
+.change-password-link {
+    flex: 1;
+    padding: 12px;
     background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#change-password:hover {
+.change-password-link:hover {
     background-color: #218838;
+    text-decoration: none;
 }
 
 /* Responsive design */
@@ -166,17 +170,17 @@ button[type="button"]:hover {
         margin: 10px;
         padding: 10px;
     }
-    
+
     #user-profile {
         padding: 20px;
     }
-    
+
     .button-group {
         flex-direction: column;
     }
-    
+
     button[type="submit"],
-    button[type="button"] {
+    .change-password-link {
         margin-bottom: 10px;
     }
 }
