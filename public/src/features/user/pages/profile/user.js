@@ -9,12 +9,12 @@ document.addEventListener("DOMContentLoaded", async function (){
     const userImageElem = document.getElementById('profile-image');
 
     if (userImageElem) {
-        userImageElem.src = profileImageUrl;
+        userImageElem.src = profileImageUrl || '/assets/user.png';
     } else {
         console.warn("'profile-image' <img> 태그를 찾을 수 없습니다.")
     }
 
-    document.getElementById("email").value = "email"
+    document.getElementById("email").value = user.email;
     document.getElementById("nickname").value = user.nickname;
 });
 

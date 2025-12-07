@@ -3,50 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>개인정보</title>
+    <title>프로필</title>
     <link rel="stylesheet" type="text/css" href="/src/features/user/pages/profile/user.css">
-    <link rel="stylesheet" href="/src/shared/component/layout.css">
-
-    <script type="module" src="/src/shared/component/layout.js" defer></script>
-    <script src="/assets/lib/axios.min.js"></script>
-    <script type="module" src="/src/core/api/api.js"></script>
-    <script src="/src/features/auth/authStore.js"></script>
-    <script src="/src/features/user/pages/profile/user.js" type="module"></script>
+    <link rel="stylesheet" type="text/css" href="/src/shared/component/header/header.css">
+    <link rel="stylesheet" type="text/css" href="/src/shared/component/footer/footer.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-    <div id="header-placeholder"></div>
-    
+    <header class="navbar">
+        <div class="navbar-left">
+            <a href="/main" class="logo">
+                <i data-lucide="chef-hat" class="logo-icon"></i>
+                <span>밥상머리</span>
+            </a>
+        </div>
+        <div class="navbar-right" id="navbar-right-content">
+            <a href="/main?mode=flipped" class="nav-link-special" id="special-page-link">
+                <span class="inner-text">밥상 뒤집기</span>
+            </a>
+            <div class="search-bar" id="search-bar">
+                <input type="text" placeholder="레시피 검색...">
+                <i data-lucide="search" class="search-icon"></i>
+            </div>
+            <a href="/src/features/posts/pages/create/create-post.html" class="write-button" id="write-button">글쓰기</a>
+            <div class="header-user-menu" id="user-menu">
+                <img src="/assets/images/user.png" alt="유저 이미지" id="user-menu-trigger" class="header-user-image">
+                <div class="dropdown-menu" id="user-dropdown">
+                    <a href="/user/me">개인정보</a>
+                    <a href="#" id="logout-button">로그아웃</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <main>
-        <h2>개인정보</h2>
-        
-        <form id="user-profile">
-            <div class="image-uploader">
-                <label for="image-input" class="image-upload-label">프로필 이미지
-                    <img class="image-preview" src="/assets/user.png" alt="프로파일 이미지 업로드" id="profile-image">
-                </label>
-                <input type="file" id="image-input" accept="image/*" class="visually-hidden">
-            </div>
-
-            <div>
-                <label for="email">이메일</label>
-                <input type="email" id="email" readonly placeholder=" ">
-                <small class="readonly-note">이메일은 변경할 수 없습니다</small>
-            </div>
-
-            <div>
-                <label for="nickname">닉네임</label>
-                <input type="text" id="nickname" required placeholder="닉네임은 필수 입니다">
-                <p id="nicknameVerified" style="display: none;"> </p>
-
-            </div>
-
-            <div class="button-group">
-                <button type="submit" id="update-profile">프로필 업데이트</button>
-                <a href="/password" class="change-password-link">비밀번호 변경</a>
-            </div>
-        </form>
+        <!-- Content for user.html -->
     </main>
-    <div id="footer-placeholder"></div>
 
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="/terms-of-service">이용약관</a>
+                <a href="/privacy-policy">개인정보 처리 방침</a>
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2025 밥상머리. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/src/features/auth/authStore.js"></script>
+    <script src="/src/shared/shared.js" type="module" defer></script>
+    <script src="/src/features/user/pages/profile/user.js" type="module"></script>
 </body>
 </html>
