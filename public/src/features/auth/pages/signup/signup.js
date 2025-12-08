@@ -22,6 +22,12 @@ const imagePreview = document.getElementById('image-preview');
 const DEFAULT_AVATAR_IMAGE = 'assets/user.png'
 const MAX_PROFILE_SIZE_MB = 10; //10MB
 
+// 초기 로드 시 기본 이미지 사용 중이므로 default 클래스 추가
+const imageLabel = imagePreview.closest('.image-upload-label');
+if (imageLabel) {
+    imageLabel.classList.add('default');
+}
+
 imageInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
 

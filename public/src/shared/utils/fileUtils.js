@@ -6,15 +6,26 @@
  * @param {string} defaultSrc - 파일이 없거나 취소 됐을 때 표시할 기본 이미지 경로
  * */
 export function renderImagePreview(file, previewImgElement, defaultSrc) {
+    // label 요소 찾기 (image-preview의 부모)
+    const label = previewImgElement.closest('.image-upload-label');
+
     if (file) {
         const reader = new FileReader();
         //파일 읽기가 완료되었을 때 실행될 콜백 함수
         reader.onload = (event) => {
             previewImgElement.src = event.target.result;
+            // 사용자 이미지가 선택되면 default 클래스 제거
+            if (label) {
+                label.classList.remove('default');
+            }
         };
         reader.readAsDataURL(file);
     } else {
         previewImgElement.src = defaultSrc;
+        // 기본 이미지 사용 시 default 클래스 추가
+        if (label) {
+            label.classList.add('default');
+        }
     }
 }
 

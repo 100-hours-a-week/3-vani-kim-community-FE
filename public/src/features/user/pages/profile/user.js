@@ -17,6 +17,16 @@ document.addEventListener("DOMContentLoaded", async function (){
 
     if (userImageElem) {
         userImageElem.src = profileImageUrl || DEFAULT_AVATAR_IMAGE;
+
+        // 기본 이미지를 사용하는 경우 default 클래스 추가
+        const imageLabel = userImageElem.closest('.image-upload-label');
+        if (imageLabel) {
+            if (!profileImageUrl || profileImageUrl === DEFAULT_AVATAR_IMAGE) {
+                imageLabel.classList.add('default');
+            } else {
+                imageLabel.classList.remove('default');
+            }
+        }
     } else {
         console.warn("'profile-image' <img> 태그를 찾을 수 없습니다.")
     }
