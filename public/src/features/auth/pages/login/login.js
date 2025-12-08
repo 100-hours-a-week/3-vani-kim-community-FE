@@ -57,20 +57,20 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         }
 
         // 6. 로그인 성공 알림
-        alert('로그인 성공');
+        window.toast.success('로그인 성공!');
 
         // 7. 리다이렉트 처리
         // URL의 redirect 파라미터가 있으면 해당 페이지로, 없으면 메인 페이지로 이동
         const urlParams = new URLSearchParams(window.location.search);
-        const redirectPath = urlParams.get('redirect') || '/index.html';
+        const redirectPath = urlParams.get('redirect') || '/index';
         window.location.href = redirectPath;
 
     } catch (error) {
         console.error('로그인 실패:', error);
         if (error.response?.status === 401) {
-            alert('이메일 또는 비밀번호가 올바르지 않습니다.');
+            window.toast.error('이메일 또는 비밀번호가 올바르지 않습니다.');
         } else {
-            alert('로그인 중 오류가 발생했습니다.');
+            window.toast.error('로그인 중 오류가 발생했습니다.');
         }
     }
 });

@@ -16,7 +16,7 @@ imageInput.addEventListener('change', (event) => {
 
     //크기 검사 로직을 util 함수로 대체
     if (!isFileSizeValid(file,MAX_PROFILE_SIZE_MB)) {
-        alert(`파일 크기는 ${MAX_PROFILE_SIZE_MB} MB를 초과할 수 없습니다.`);
+        window.toast.warning(`파일 크기는 ${MAX_PROFILE_SIZE_MB} MB를 초과할 수 없습니다.`);
         imageInput.value = "";
         renderImagePreview(null, imagePreview, DEFAULT_AVATAR_IMAGE);
         return;
@@ -53,7 +53,7 @@ document.getElementById('post-form').addEventListener('submit', async (event) =>
         } catch (serverError) {
             console.error('Presigned URL 요청 실패:', serverError);
             // TODO: serverError.response.data.message 처럼 좀 더 구체적으로
-            alert('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
+            window.toast.error('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
             return;
         }
         console.log('url요청 끝')
@@ -64,7 +64,7 @@ document.getElementById('post-form').addEventListener('submit', async (event) =>
 
         } catch (error) {
             console.error('이미지 업로드 실패:', error);
-            alert('이미지 업로드 오류, 다시 시도해 주세요.');
+            window.toast.error('이미지 업로드 오류, 다시 시도해 주세요.');
             return;
         }
     }
@@ -75,15 +75,17 @@ document.getElementById('post-form').addEventListener('submit', async (event) =>
 
         if (newPost) {
             console.log('게시글 생성 성공');
-            alert('게시글 생성 성공');
+            window.toast.success('게시글 생성 성공!');
         }
 
         //받아온 데이터 보관
         sessionStorage.setItem("tempPost", JSON.stringify(newPost));
-        window.location.href = `/post/${newPost.postId}`;
+        setTimeout(() => {
+            window.location.href = `/post/${newPost.postId}`;
+        }, 1000);
 
     } catch (error) {
         console.log(error);
-        alert('게시글 생성에 실패하였습니다.')
+        window.toast.error('게시글 생성에 실패하였습니다.');
     }
 });
