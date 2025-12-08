@@ -136,12 +136,15 @@ document.getElementById('update-password-form').addEventListener('submit', async
     try {
         // 비밀번호 수정 API 호출
         await updatePassword(newPasswordValue);
-        alert('비밀번호가 성공적으로 수정되었습니다.');
+        window.toast.success('비밀번호가 성공적으로 수정되었습니다.');
 
         // 토큰 삭제 및 로그인 페이지로 이동
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/login';
+
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 1500);
 
     } catch (error) {
         console.error('비밀번호 수정 실패:', error);
@@ -152,7 +155,7 @@ document.getElementById('update-password-form').addEventListener('submit', async
             currentPasswordVerified.classList.add('error');
             currentPasswordVerified.style.display = 'block';
         } else {
-            alert('비밀번호 수정에 실패했습니다. 다시 시도해주세요.');
+            window.toast.error('비밀번호 수정에 실패했습니다. 다시 시도해주세요.');
         }
     }
 });
