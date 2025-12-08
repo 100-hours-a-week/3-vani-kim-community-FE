@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>밥상머리 - 기억을 넘어, 맛을 기록하다</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Serif+KR:wght@600&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/src/shared/component/footer/footer.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/lib/axios.min.js"></script>
+
+    <!-- Page-specific Stylesheet -->
+    <link rel="stylesheet" href="landing.css">
+</head>
+<body>
+    <header class="landing-header">
+        <div class="landing-header-container">
+            <a href="/" class="logo">
+                <i data-lucide="chef-hat" class="logo-icon"></i>
+                <span>밥상머리</span>
+            </a>
+            <nav class="landing-nav">
+                <a href="/login" class="nav-link">로그인</a>
+                <a href="/signup" class="nav-button">회원가입</a>
+            </nav>
+        </div>
+    </header>
+
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>기억은 흐릿해지지만,<br>맛은 기록할 수 있습니다.</h1>
+                <p>밥상머리에서 당신의 추억을 레시피로 남기세요.</p>
+            </div>
+
+
+            <div class="polaroid-container">
+                <div class="polaroid polaroid-1">
+                    <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500" alt="음식 사진 1">
+                    <p class="caption">2023.12.25 엄마표 떡국</p>
+                </div>
+                <div class="polaroid polaroid-2">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=500" alt="음식 사진 2">
+                    <p class="caption">할머니 생신상</p>
+                </div>
+                <div class="polaroid polaroid-3">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500" alt="음식 사진 3">
+                    <p class="caption">아빠가 만든 김치볶음밥</p>
+                </div>
+                <div class="polaroid polaroid-4">
+                    <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?w=500" alt="음식 사진 4">
+                    <p class="caption">2024.01.01 새해 첫 식사</p>
+                </div>
+                <div class="polaroid polaroid-5">
+                    <img src="https://images.unsplash.com/photo-1586190848861-99ae4a171e90?w=500" alt="음식 사진 5">
+                    <p class="caption">나의 첫 베이킹</p>
+                </div>
+                 <div class="polaroid polaroid-6">
+                    <img src="https://images.unsplash.com/photo-1484723051597-62b8a788a660?w=500" alt="음식 사진 6">
+                    <p class="caption">소풍 도시락</p>
+                </div>
+            </div>
+            
+            <a href="/main" class="cta-button">내 추억 기록하러 가기</a>
+        </section>
+
+        <!-- Storytelling Section -->
+        <section class="story-section">
+            <div class="story-item reveal">
+                <div class="story-image">
+                    <img src="https://images.unsplash.com/photo-1558544155-4a43f8238466?q=80&w=2070&auto=format&fit=crop" alt="빛바랜 사진">
+                </div>
+                <div class="story-text">
+                    <h2>전화 한 통이면 물어볼 수 있었던 그 레시피,</h2>
+                    <p>언젠가는 물어볼 곳이 없어집니다.</p>
+                </div>
+            </div>
+            <div class="story-item reveal">
+                <div class="story-text">
+                    <h2>계량컵 대신 '적당히', 타이머 대신 '고소한 냄새가 날 때'.</h2>
+                    <p>그 감각적인 언어를 번역해 드립니다.</p>
+                </div>
+                <div class="story-image">
+                    <img src="https://images.unsplash.com/photo-1542844325-45a7b5394851?q=80&w=1968&auto=format&fit=crop" alt="손글씨 레시피 노트">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="features-container">
+                <h2 class="reveal">주요 기능</h2>
+                <div class="features-grid">
+                    <div class="feature-card reveal">
+                        <i data-lucide="book-heart"></i>
+                        <h3>나만의 아카이브</h3>
+                        <p>사진과 함께 엄마의 팁(Tip)까지 꼼꼼하게 기록하고 언제든 꺼내볼 수 있습니다.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i data-lucide="users"></i>
+                        <h3>가족과의 공유</h3>
+                        <p>우리 가족만의 비밀 레시피 북을 만들어 소중한 사람들과 맛의 역사를 공유하세요.</p>
+                    </div>
+                    <div class="feature-card reveal">
+                        <i data-lucide="utensils-crossed"></i>
+                        <h3>따뜻한 커뮤니티</h3>
+                        <p>"다른 집은 뭐 해 먹지?" 이웃의 정겨운 집밥을 구경하고 소통할 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-links">
+                <a href="/terms-of-service">이용약관</a>
+                <a href="/privacy-policy">개인정보 처리 방침</a>
+            </div>
+            <div class="footer-info">
+                <p>&copy; 2025 밥상머리. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="landing.script.js"></script>
+
+</body>
+</html>
