@@ -201,15 +201,16 @@
     height: 450px;
     transform-style: preserve-3d;
     transition: transform 0.3s ease;
-    /* 랜덤 회전은 JavaScript로 data-rotation 속성으로 적용 */
+    /* 기본 180도 회전 + 랜덤 회전 */
+    transform: rotate(180deg);
 }
 
 .ruined-card[data-rotation] {
-    transform: rotate(calc(var(--rotation, 0) * 1deg));
+    transform: rotate(calc(180deg + var(--rotation, 0) * 1deg));
 }
 
 .ruined-card:hover {
-    transform: rotate(calc(var(--rotation, 0) * 1deg)) translateY(-10px);
+    transform: rotate(calc(180deg + var(--rotation, 0) * 1deg)) translateY(-10px);
 }
 
 .card-flipper {

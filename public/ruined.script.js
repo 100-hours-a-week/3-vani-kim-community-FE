@@ -2,23 +2,24 @@
 const RUINED_POSTS = [
     {
         id: 'ruined-1',
-        title: '지옥에서 온 크루아상',
-        image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800&h=600&fit=crop',
-        excerpt: '오븐 온도를 250도로 설정했는데... 화씨였습니다. 크루아상은 증발했고 남은 건 숯덩이뿐.',
-        author: '제빵초보',
+        title: '닭도 안먹는 최악의 음식',
+        image: '/assets/images/ruined/chix01.jpg',
+        excerpt: '자신감 넘쳤던 나의 첫 요리... 결과는 참담했습니다. 닭도 거들떠보지 않는 비주얼.',
+        author: '요리포기',
         likes: 999,
         comments: 42,
-        category: '제빵',
-        story: `첫 베이킹 도전기였습니다. 유튜브 보고 따라했는데 오븐 온도를 잘못 봤어요.
-                250°F를 250°C로 착각해서... 5분만에 연기가 나더군요.
-                소방서 올 뻔 했습니다. 엄마한테 혼났어요.
+        category: '실패작',
+        story: `처음으로 집에서 요리를 해봤습니다. 레시피를 보고 따라했는데...
+                뭔가 이상했어요. 색깔도 이상하고 냄새도 이상하고.
+                자신있게 가족들 앞에 내놨더니 다들 침묵했습니다.
+                심지어 키우던 닭에게 줬더니 쳐다도 안 보더군요.
 
-                <strong>교훈:</strong> 레시피 제대로 읽자. 화씨와 섭씨는 다르다.`
+                <strong>교훈:</strong> 자신감도 좋지만 기본은 지키자. 소금과 설탕은 다르다.`
     },
     {
         id: 'ruined-2',
-        title: '엘사가 녹아버린 케이크',
-        image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&h=600&fit=crop',
+        title: '녹아버린 케이크',
+        image: '/assets/images/ruined/cake.jpg',
         excerpt: '조카 생일 케이크를 만들었는데... 아이스크림 케이크인 줄 알고 상온에 뒀더니 엘사가 녹았습니다.',
         author: '이모의슬픔',
         likes: 856,
@@ -34,7 +35,7 @@ const RUINED_POSTS = [
     {
         id: 'ruined-3',
         title: '용암 죽 (feat. 냄비)',
-        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&h=600&fit=crop',
+        image: '/assets/images/ruined/burn.jpg',
         excerpt: '아침에 죽을 끓이고 화장실 갔다가... 집이 불타는 줄 알았습니다. 냄비째로 타버렸어요.',
         author: '아침식사실패',
         likes: 1203,
@@ -51,7 +52,7 @@ const RUINED_POSTS = [
     {
         id: 'ruined-4',
         title: '숯덩이 쿠키',
-        image: 'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=800&h=600&fit=crop',
+        image: '/assets/images/ruined/cookie.jpg',
         excerpt: '초콜릿 칩 쿠키를 구웠는데... 초콜릿인지 쿠키인지 숯인지 구분이 안 갑니다.',
         author: '쿠키몬스터좌절',
         likes: 734,
@@ -68,7 +69,7 @@ const RUINED_POSTS = [
     {
         id: 'ruined-5',
         title: '미확인 물체 (원래는 카레)',
-        image: 'https://images.unsplash.com/photo-1585937421612-70e008356f1b?w=800&h=600&fit=crop',
+        image: '/assets/images/ruined/curry.jpg',
         excerpt: '카레를 만들었는데... 이게 카레인지 수프인지 걸쭉한 물인지 모르겠습니다.',
         author: '요리는어려워',
         likes: 921,
@@ -85,7 +86,7 @@ const RUINED_POSTS = [
     {
         id: 'ruined-6',
         title: '크툴루의 파스타',
-        image: 'https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&h=600&fit=crop',
+        image: '/assets/images/ruined/pasta.jpg',
         excerpt: '오징어 먹물 파스타를 만들었는데... 외계 생명체가 된 기분입니다. 입 안이 검정.',
         author: '이탈리아의적',
         likes: 1567,
@@ -156,7 +157,7 @@ function createRuinedCard(post) {
     // 상세보기 버튼 클릭
     detailBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        window.location.href = `/ruined-detail.html?id=${post.id}`;
+        window.location.href = `/ruined-detail?id=${post.id}`;
     });
 
     return cardFragment;
@@ -233,8 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 카드 렌더링
     renderCards();
 
-    // Chaos Scroll 효과 활성화 (선택사항)
-    window.addEventListener('scroll', onScroll, { passive: true });
+    // Chaos Scroll 효과 비활성화
+    // window.addEventListener('scroll', onScroll, { passive: true });
 
     // Lucide 아이콘 초기 렌더링
     if (window.lucide) {
