@@ -486,6 +486,65 @@
     margin-top: 16px;
 }
 
+/* Comment Edit Mode */
+.comment-edit-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--primary-color);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+}
+
+.comment-edit-textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
+}
+
+.comment-edit-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.save-edit-btn,
+.cancel-edit-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.save-edit-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.save-edit-btn:hover {
+    background-color: #EA580C;
+    transform: translateY(-1px);
+}
+
+.cancel-edit-btn {
+    background-color: var(--background-pale);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+}
+
+.cancel-edit-btn:hover {
+    background-color: #E2E8F0;
+}
+
 /* Infinite Scroll */
 .infinite-scroll {
     height: 20px;
@@ -598,6 +657,18 @@
 
     .reply-list {
         margin-left: 20px;
+    }
+
+    .comment-edit-textarea {
+        font-size: 0.875rem;
+        min-height: 70px;
+        padding: 10px 14px;
+    }
+
+    .save-edit-btn,
+    .cancel-edit-btn {
+        padding: 8px 14px;
+        font-size: 0.8125rem;
     }
 }
 
