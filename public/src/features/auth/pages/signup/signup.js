@@ -32,7 +32,7 @@ imageInput.addEventListener('change', (event) => {
 
     //크기 검사 로직을 util 함수로 대체
     if (!isFileSizeValid(file,MAX_PROFILE_SIZE_MB)) {
-        alert(`파일 크기는 ${MAX_PROFILE_SIZE_MB} MB를 초과할 수 없습니다.`);
+        window.toast.warning(`파일 크기는 ${MAX_PROFILE_SIZE_MB} MB를 초과할 수 없습니다.`);
         imageInput.value = "";
         renderImagePreview(null, imagePreview, DEFAULT_AVATAR_IMAGE);
         return;
@@ -201,7 +201,7 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
         } catch (serverError) {
             console.error('Presigned URL 요청 실패:', serverError);
             // TODO: serverError.response.data.message 처럼 좀 더 구체적으로
-            alert('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
+            window.toast.error('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
             return;
         }
 
@@ -211,7 +211,7 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
 
         } catch (error) {
             console.error('이미지 업로드 실패:', error);
-            alert('이미지 업로드 오류, 다시 시도해 주세요.');
+            window.toast.error('이미지 업로드 오류, 다시 시도해 주세요.');
             return; // 회원가입 중단
         }
     }
@@ -220,11 +220,13 @@ document.getElementById('signup').addEventListener('submit', async (event) => {
         const signupData = await signup(emailValue, passwordValue, nicknameValue, profileImageKey);
 
         // 페이지 이동
-        alert('회원가입 성공');
-        window.location.href = '/login';
+        window.toast.success('회원가입 성공!');
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 1500);
     } catch (error) {
         console.error('회원가입 실패:', error);
-        alert('회원가입에 실패했습니다.');
+        window.toast.error('회원가입에 실패했습니다.');
     }
 });
 

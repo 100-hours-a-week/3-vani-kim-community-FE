@@ -13,7 +13,7 @@ export async function getUser() {
 
 export async function updateUser(nickname, profileImageKey) {
     try {
-        const response = await apiClient.patch(`/user/me`, {
+        const response = await apiClient.patch(`/users/me`, {
             nickname,
             profileImageKey
         });
