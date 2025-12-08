@@ -2,46 +2,58 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시글 작성</title>
-    <link rel="stylesheet" type="text/css" href="/src/features/posts/pages/create/create-post.css">
-    <link rel="stylesheet" href="/src/shared/component/layout.css">
 
-    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <!-- Global & Layout CSS -->
+    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/src/shared/component/header/header.css">
+    <link rel="stylesheet" href="/src/shared/component/footer/footer.css">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="/src/features/posts/pages/create/create-post.css">
+    <link rel="stylesheet" href="/src/shared/component/toast/toast.css">
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="/assets/lib/axios.min.js"></script>
-    <script type="module" src="/src/core/api/api.js"></script>
     <script src="/src/features/auth/authStore.js"></script>
+    <script type="module" src="/src/shared/component/toast/toast.js"></script>
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
     <script src="/src/features/posts/pages/create/create-post.js" type="module"></script>
 </head>
 <body>
 <div id="header-placeholder"></div>
-    <!-- TODO 여러이미지 업로드 -->
-    <main>
-        <h3>게시글 작성</h3>
-        <form class="post-form" id="post-form" enctype="multipart/form-data">
-            <div class="post-form-group">
+
+<main class="auth-main">
+    <div class="auth-container post-creation-container">
+        <h2 class="auth-title">게시글 작성</h2>
+        <form class="auth-form" id="post-form" enctype="multipart/form-data">
+            <div class="form-group">
                 <label for="title">제목<span class="required">*</span></label>
-                <input type="text" id="title" name="title" placeholder="제목을 입력해주세요 최대 100자">
+                <input type="text" id="title" name="title" placeholder="제목을 입력해주세요 (최대 100자)" required>
             </div>
 
-            <div class="post-form-group">
-                <label>내용<span class="required">*</span></label>
-                <textarea id="content" name="content" required></textarea>
+            <div class="form-group">
+                <label for="content">내용<span class="required">*</span></label>
+                <textarea id="content" name="content" placeholder="여러분의 소중한 레시피와 이야기를 들려주세요." required></textarea>
             </div>
-            <div class="post-image-upload">
-                <label class="image-upload-label" for="image-input">이미지
-                    <img class="image-preview" id="image-preview" src="assets/user.png" alt="프로파일 이미지 미리보기">
-                    <span class="upload-text">클릭하여 이미지 업로드</span>
+
+            <div class="form-group image-uploader">
+                <label for="image-input" class="image-upload-label">
+                    <div class="image-preview-box">
+                        <img class="image-preview" id="image-preview" src="/assets/images/logo.svg" alt="이미지 미리보기">
+                    </div>
+                    <span>레시피 사진 추가</span>
                 </label>
-
-                <input type="file" id="image-input" name="image" accept="image/*" style="display: none;">
+                <input type="file" id="image-input" name="image" accept="image/*" class="visually-hidden">
             </div>
 
-
-            <div class="btn-container">
-                <button type="submit" class="post-submit">완료</button>
-            </div>
+            <button type="submit" class="auth-button">작성 완료</button>
         </form>
-    </main>
+    </div>
+</main>
+
 <div id="footer-placeholder"></div>
 </body>
 </html>
