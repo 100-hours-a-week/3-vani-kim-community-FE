@@ -1,130 +1,94 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Styles for the main authentication/form container layout */
+.auth-main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.6;
-}
-
-main {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-h3 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 1.5rem;
-}
-
-.post-form {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-}
-#image-preview {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    display: block;
-    border: 3px solid #ddd;
-    transition: border-color 0.2s ease;
-}
-
-input[type="text"],
-textarea {
+.auth-container.post-creation-container {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    transition: border-color 0.2s ease;
-    font-family: inherit;
+    max-width: 680px; /* Wider container for post creation */
+    background-color: var(--background-light);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
 }
 
-input[type="text"]:focus,
-textarea:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+.auth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 32px;
 }
 
-textarea {
-    min-height: 120px;
+.auth-form textarea {
+    min-height: 200px;
     resize: vertical;
 }
 
-.image-upload {
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    padding: 40px;
-    text-align: center;
-    transition: border-color 0.2s ease;
-    cursor: pointer;
-}
-
-.image-upload:hover {
-    border-color: #007bff;
-}
-
-.image-upload input[type="file"] {
-    display: none;
-}
-
-.upload-text {
-    color: #666;
-    font-size: 14px;
-}
-
-.btn-container {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 30px;
-}
-
-button {
-    padding: 12px 24px;
+.auth-button {
+    width: 100%;
+    padding: 14px 16px;
     border: none;
-    border-radius: 4px;
-    font-size: 16px;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    margin-top: 12px;
 }
 
-.btn-primary {
-    background-color: #007bff;
-    color: white;
+.auth-button:hover {
+    background-color: #dd6311;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
+/* Image Uploader specific styles */
+.image-uploader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
 }
 
-.btn-secondary {
-    background-color: #6c757d;
-    color: white;
+.image-upload-label {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
 }
 
-.btn-secondary:hover {
-    background-color: #545b62;
+.image-preview-box {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    border: 2px dashed var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--background-pale);
+    transition: border-color 0.2s ease;
+}
+
+.image-upload-label:hover .image-preview-box {
+    border-color: var(--primary-color);
+}
+
+.image-preview {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.image-upload-label span {
+    font-weight: 500;
+    color: var(--primary-color);
 }

@@ -1,118 +1,189 @@
-a {
-    text-decoration: none;
-    color: inherit;
-}
+/* Shared Header Styles */
 
-a:hover {
-    text-decoration: underline;
-}
-
-#header-placeholder {
+/* Base Navbar */
+.navbar {
     position: sticky;
-
     top: 0;
-
-    background-color: white;
-
-    border-bottom: 2px solid #000000;
-
+    left: 0;
     width: 100%;
-
-    z-index: 100;
-}
-
-nav {
-    max-width: 500px;
-
-    margin: 0 auto;
-
+    height: var(--navbar-height, 60px);
     display: flex;
-    justify-content: center;
+    align-items: center; /* Vertically center content */
+    background-color: var(--card-background-color, #FFFFFF);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    z-index: 1000;
+}
+
+.navbar-container {
+    width: 100%;
+    max-width: 1200px; /* Or your preferred max-width */
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
     align-items: center;
-
-    position: relative;
-
-    height: 50px;
+    justify-content: space-between;
 }
 
-.header-title {
-    font-size: 1.5rem;
+
+/* Back Button */
+.back-button {
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--text-color, #0F172A);
+    text-decoration: none;
+    margin-right: 16px;
+    line-height: 1;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
     font-weight: bold;
-    color: black;
-    text-decoration: none;
+    color: var(--text-color, #0F172A);
 }
 
-.header-title:hover {
-    text-decoration: none;
+.logo-icon {
+    transition: transform 0.3s ease;
 }
 
-.header-user {
+.logo:hover .logo-icon {
+    transform: rotate(15deg);
+}
+
+/* Right side of Navbar */
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Special Link ("Flip Table") */
+.nav-link-special {
+    background-color: var(--text-color, #0F172A);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    display: block;
+    perspective: 500px;
+    transform-style: preserve-3d;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-link-special .inner-text {
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Tilt animations */
+.nav-link-special.is-tilting.from-top .inner-text { transform: rotateX(-20deg); }
+.nav-link-special.is-tilting.from-right .inner-text { transform: rotateY(20deg); }
+.nav-link-special.is-tilting.from-bottom .inner-text { transform: rotateX(20deg); }
+.nav-link-special.is-tilting.from-left .inner-text { transform: rotateY(-20deg); }
+
+/* Spin animation */
+.nav-link-special.is-spinning .inner-text {
+    animation: spin-3d 0.6s ease-in-out;
+}
+
+@keyframes spin-3d {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+/* Search Bar */
+.search-bar {
+    position: relative;
+}
+
+.search-bar input {
+    width: 200px;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.search-bar .search-icon {
     position: absolute;
-    right: 0;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94A3B8;
 }
 
-.header-user-image{
+/* Write Button */
+.write-button {
+    background-color: var(--primary-color, #F97316);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.write-button:hover {
+    background-color: #EA580C;
+}
+
+/* User Menu */
+.header-user-menu {
+    position: relative;
+}
+
+.header-user-image {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    object-fit: cover;
     cursor: pointer;
+    object-fit: cover;
 }
 
-.header-user-menu {
-    position: absolute;
-    right: 0;
-}
-
-
-/* 3. JS가 이 클래스를 추가/제거하여 메뉴를 보임 */
-.dropdown-menu.show {
-    display: block; /* ⭐️ 보이기 */
-}
-
-/* 드롭다운 메뉴 내부 링크 스타일 */
-.dropdown-menu{
+.dropdown-menu {
     display: none;
     position: absolute;
-    top: 50px; /* 아이콘 바로 아래 (아이콘 높이 + 여백) */
     right: 0;
-
+    top: 50px;
     background-color: white;
-    border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    min-width: 140px;
-    z-index: 101; /* 헤더보다 위에 */
-    overflow: hidden; /* border-radius가 링크에도 적용되도록 */
+    overflow: hidden;
+    z-index: 1100;
+    width: 120px;
+}
+
+.dropdown-menu.show {
+    display: block;
 }
 
 .dropdown-menu a {
     display: block;
     padding: 12px 16px;
-    color: #333;
+    color: var(--body-text-color, #475569);
+    text-decoration: none;
     font-size: 14px;
-    transition: background-color 0.2s ease;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-.dropdown-menu a:last-child {
-    border-bottom: none;
 }
 
 .dropdown-menu a:hover {
-    background-color: #f5f5f5;
-    text-decoration: none;
-}
-.back-button {
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-    color: black;
-    position: absolute;
-    left: 0;
+    background-color: #f1f1f1;
 }
 
-.back-button:hover {
-    text-decoration: none;
-    opacity: 0.7;
+/* Responsive Overrides for Header */
+@media (max-width: 767px) {
+    .navbar {
+        padding: 0 16px;
+    }
+    
+    .search-bar input {
+        display: none;
+    }
+
+    .search-icon {
+        position: static;
+        transform: none;
+    }
 }
