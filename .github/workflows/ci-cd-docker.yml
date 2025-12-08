@@ -10,8 +10,7 @@ env:
 on:
   push:
     branches:
-      - main
-
+      - features/onlyaction
 permissions:
   id-token: write
   contents: read
