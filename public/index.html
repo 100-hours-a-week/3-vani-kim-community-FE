@@ -4,57 +4,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>아무말 대잔치</title>
-    <link rel="stylesheet" href="/src/shared/component/layout.css">
+    <title>밥상머리</title>
+
+    <!-- Global & Layout CSS -->
+    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/src/shared/component/header/header.css">
+    <link rel="stylesheet" href="/src/shared/component/footer/footer.css">
+
+    <!-- Page-specific CSS -->
     <link rel="stylesheet" href="/index.css">
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/lib/axios.min.js"></script>
+    <script src="/src/features/auth/authStore.js" defer></script>
     <script type="module" src="/src/shared/component/layout.js" defer></script>
     <script type="module" src="/index.js" defer></script>
-    <script src="/assets/lib/axios.min.js"></script>
-    <script src="/src/core/api/api.js" type="module"></script>
-    <script src="/src/features/auth/authStore.js"></script>
-
 </head>
 <body>
-<div id="header-placeholder"></div>
-    <main class="content">
-        <h4 class="greetings">안녕하세요,<br>아무 말 대잔치 <strong>게시판</strong>입니다.</h4>
-
-        <div class="post-section">
-            <div class="post-creation">
-                <a href="/post"><button type="button" id="post-creation">게시글 작성</button></a>
+    <div id="header-placeholder"></div>
+    <main>
+        <div class="main-container">
+            <div class="page-header">
+                <h1 class="page-title">밥상머리 레시피</h1>
+                <p class="page-subtitle">우리 가족의 특별한 레시피를 공유해보세요</p>
             </div>
 
-            <ul class="post-list-container">
-                </ul>
-            <div id="infinite-scroll-trigger" class="infinite-scroll-trigger"></div>
+            <!-- 카테고리 필터 -->
+            <div class="category-filter-wrapper">
+                <div class="category-filter">
+                    <button class="category-pill active" data-category="all">전체</button>
+                    <button class="category-pill" data-category="korean">한식</button>
+                    <button class="category-pill" data-category="western">양식</button>
+                    <button class="category-pill" data-category="chinese">중식</button>
+                    <button class="category-pill" data-category="japanese">일식</button>
+                    <button class="category-pill" data-category="dessert">디저트</button>
+                    <button class="category-pill" data-category="snack">간식</button>
+                    <button class="category-pill" data-category="side">반찬</button>
+                </div>
+            </div>
 
-            <div id="end-of-list-message" class="end-of-list-message">
-                <p>모든 게시글을 불러왔습니다.</p>
+            <div class="post-section">
+                <div class="post-creation">
+                    <a href="/post">
+                        <button type="button" class="create-post-btn">
+                            <i data-lucide="plus"></i>
+                            <span>레시피 작성</span>
+                        </button>
+                    </a>
+                </div>
+
+                <div class="post-grid-container">
+                </div>
+
+                <div id="infinite-scroll-trigger" class="infinite-scroll-trigger"></div>
+
+                <div id="end-of-list-message" class="end-of-list-message">
+                    <p>모든 게시글을 불러왔습니다.</p>
+                </div>
             </div>
         </div>
     </main>
-
     <div id="footer-placeholder"></div>
-    <template id="post-item-template">
-        <li class="post-item">
-            <a href="/post/placeholder-id" class="post-link">
-                <div class="content-area">
-                    <h2 class="post-title">게시글 제목</h2>
-                    <div class="post-meta">
-                        <div class="post-stats">
-                            <div class="likes">좋아요수 0</div>
-                            <div class="views">조회수 0</div>
-                            <div class="comments">댓글수 0</div>
+
+    <!-- 모달 -->
+    <div id="post-modal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="modal-close" aria-label="닫기">
+                <i data-lucide="x"></i>
+            </button>
+            <div class="modal-body">
+                <div class="modal-image-wrapper">
+                    <img src="" alt="" class="modal-image">
+                </div>
+                <div class="modal-info">
+                    <span class="modal-category">카테고리</span>
+                    <h2 class="modal-title">제목</h2>
+                    <div class="modal-author">
+                        <img src="" alt="" class="modal-author-avatar">
+                        <div class="modal-author-info">
+                            <span class="modal-author-name">작성자</span>
+                            <time class="modal-date"></time>
                         </div>
-                        <time class="post-date" datetime=""></time>
+                    </div>
+                    <div class="modal-stats">
+                        <span class="modal-stat">
+                            <i data-lucide="eye"></i>
+                            <span class="modal-views">0</span>
+                        </span>
+                        <span class="modal-stat">
+                            <i data-lucide="heart"></i>
+                            <span class="modal-likes">0</span>
+                        </span>
+                        <span class="modal-stat">
+                            <i data-lucide="message-circle"></i>
+                            <span class="modal-comments">0</span>
+                        </span>
+                    </div>
+                    <p class="modal-excerpt">본문 미리보기...</p>
+                    <a href="#" class="modal-detail-link">
+                        <span>상세보기</span>
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template id="post-item-template">
+        <div class="post-card">
+            <div class="post-card-inner" data-post-id="">
+                <!-- 이미지 영역 -->
+                <div class="card-image-wrapper">
+                    <img src="" alt="" class="card-image">
+                    <div class="card-overlay">
+                        <span class="view-count">
+                            <i data-lucide="eye"></i>
+                            <span class="view-number">0</span>
+                        </span>
                     </div>
                 </div>
-                <footer class="author-area">
-                    <span class="author-nickname">작성자</span>
-                </footer>
-            </a>
-        </li>
+                <!-- 콘텐츠 영역 -->
+                <div class="card-content">
+                    <span class="category-badge">카테고리</span>
+                    <h3 class="card-title">제목</h3>
+                    <p class="card-excerpt">본문 미리보기...</p>
+                </div>
+                <!-- 하단 정보 -->
+                <div class="card-footer">
+                    <div class="author-info">
+                        <img src="" alt="" class="author-avatar">
+                        <span class="author-name">작성자</span>
+                    </div>
+                    <div class="card-stats">
+                        <span class="stat-item">
+                            <i data-lucide="heart"></i>
+                            <span class="like-count">0</span>
+                        </span>
+                        <span class="stat-item">
+                            <i data-lucide="message-circle"></i>
+                            <span class="comment-count">0</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </template>
 
 </body>
