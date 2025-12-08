@@ -7,7 +7,7 @@ import {getComments} from "/src/features/comments/api/commentsApi.js";
  * */
 export function renderComment(comment) {
 
-    const currentUser = sessionStorage.getItem("currentUser");
+    const currentUserNickname = window.authStore.getNickname();
 
     const template= document.getElementById("comment-template");
     // 템플릿 내부의 콘텐츠를 DeepCopy하는 코드
@@ -19,6 +19,13 @@ export function renderComment(comment) {
     commentLi.dataset.commentContent = comment.content;
     clone.getElementById("author-nickname").textContent = comment.author.nickname;
     clone.getElementById("comment-content").textContent = comment.content;
+
+    // 댓글 작성자 프로필 이미지 설정
+    const commentAuthorImg = clone.querySelector('.comment-author img');
+    if (commentAuthorImg && comment.author.authorProfileImageUrl) {
+        commentAuthorImg.src = comment.author.authorProfileImageUrl;
+    }
+
     const commentDate = clone.querySelector('.comment-date');
     // 시간까지
     commentDate.textContent = new Date(comment.createdAt).toLocaleString();
@@ -27,10 +34,10 @@ export function renderComment(comment) {
     //댓글 작성자 권한 확인(수정/삭제)
     const actionMenu = clone.querySelector('.more-menu');
 
-    if(currentUser && comment.author.nickname === currentUser) {
+    if(currentUserNickname && comment.author.nickname === currentUserNickname) {
 
         const editLi = document.createElement("li");
-        editLi.innerHTML = `<a href="/edit-comment/${comment.id}" class="edit-btn">수정</a>`;
+        editLi.innerHTML = `<button type="button" class="edit-btn">수정</button>`;
 
         const deleteLi = document.createElement("li");
         deleteLi.innerHTML = `<button type="button" class="delete-btn">삭제</button>`
@@ -168,7 +175,7 @@ export function setupCommentForm(postId) {
     commentSubmitBtn.addEventListener('click', async e => {
         const content =commentInput.value;
         if(!content.trim()) {
-            alert('댓글 내용을 입력하세요');
+            window.toast.warning('댓글 내용을 입력하세요');
             return;
         }
 
@@ -180,10 +187,11 @@ export function setupCommentForm(postId) {
             document.getElementById('comment-list').prepend(commentElement);
             //입력창 비우기
             commentInput.value = '';
+            window.toast.success('댓글이 등록되었습니다.');
 
         }catch (error) {
             console.log('댓글 등록 실패 :', error);
-            alert('댓글 등록 실패, 재시도해주세요.');
+            window.toast.error('댓글 등록 실패, 재시도해주세요.');
         }
     });
 
