@@ -11,8 +11,12 @@ export function renderPost(post) {
 
     document.getElementById("post-title").textContent = post.title;
     document.getElementById("post-author-id").textContent = post.author.nickname;
-    // TODO 유저의 아이디가 반환값이 없음 수정 필요(유저 프로필 누르면 유저 정보페이지 이동용), 타인이 볼 수 있는 유저 페이지 확장 필요
-    // document.getElementById("post-author-link").href = `/user/${post.authorId}`;
+
+    // 작성자 프로필 이미지 설정
+    const authorAvatar = document.querySelector('.post-author .author-avatar');
+    if (authorAvatar && post.author.authorProfileUrl) {
+        authorAvatar.src = post.author.authorProfileUrl;
+    }
 
     const postDate = document.getElementById("post-date");
     // 보여줄 시간
@@ -22,18 +26,17 @@ export function renderPost(post) {
 
     const postImageElem = document.getElementById('post-img');
 
-    if (postImageElem) {
+    if (postImageElem && postImageUrl) {
         postImageElem.src = postImageUrl;
     } else {
         console.warn("'post-img' <img> 태그를 찾을 수 없습니다.")
     }
 
-
     document.getElementById("post-body").textContent = post.contentDetail.content;
 
-    document.getElementById('post-likes').textContent = `좋아요수 ${post.stats.likeCount}`
-    document.getElementById('post-views').textContent = `조회수 ${post.stats.viewCount}`
-    document.getElementById('post-comments').textContent = `댓글수 ${post.stats.commentCount}`
+    document.getElementById('post-likes').textContent = post.stats.likeCount;
+    document.getElementById('post-views').textContent = post.stats.viewCount;
+    document.getElementById('post-comments').textContent = post.stats.commentCount;
 
     //작성자 권한 탐색, 수정/삭제 버튼 생성
     setupPostActionListeners(post)
@@ -45,28 +48,47 @@ export function renderPost(post) {
  * 버튼 렌더링과 이벤트 연결
  * */
 export function setupPostActionListeners(post) {
-    const postActions = document.getElementById("post-actions");
-    const currentUser = sessionStorage.getItem("currentUser");
-    if(post.author.nickname === currentUser) {
-        //DOM API로 버튼 생성하기
-        //innerHTML은 간단하지만 리스키함
-        const editLink = document.createElement("a");
-        editLink.href = `/post/${post.postId}/edit`;
-        editLink.className = 'button';
-        editLink.textContent = '수정';
+    const currentUserNickname = window.authStore.getNickname();
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.type = "button";
-        deleteBtn.textContent ='삭제';
-        //JS 에서 직접 이벤트 리스너 연결
-        //페이지 처음 로드할때는 없었으니까
-        deleteBtn.addEventListener('click', () =>{
-            handleDeletePost(post.postId);
-        })
+    if(currentUserNickname && post.author.nickname === currentUserNickname) {
+        // 케밥 메뉴 버튼 표시
+        const moreBtn = document.getElementById("post-more-btn");
+        const moreMenu = document.getElementById("post-more-menu");
 
-        postActions.appendChild(editLink);
-        postActions.appendChild(deleteBtn);
+        if (moreBtn) {
+            moreBtn.style.display = 'flex';
 
+            // 수정 버튼 생성
+            const editLi = document.createElement("li");
+            editLi.innerHTML = `<a href="/post/${post.postId}/edit" class="edit-btn">수정</a>`;
+
+            // 삭제 버튼 생성
+            const deleteLi = document.createElement("li");
+            const deleteBtn = document.createElement("button");
+            deleteBtn.type = "button";
+            deleteBtn.className = "delete-btn";
+            deleteBtn.textContent = "삭제";
+            deleteBtn.addEventListener('click', () => {
+                handleDeletePost(post.postId);
+            });
+            deleteLi.appendChild(deleteBtn);
+
+            moreMenu.appendChild(editLi);
+            moreMenu.appendChild(deleteLi);
+
+            // 케밥 메뉴 토글
+            moreBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                moreMenu.classList.toggle('active');
+            });
+
+            // 외부 클릭 시 메뉴 닫기
+            document.addEventListener('click', (e) => {
+                if (!moreBtn.contains(e.target) && !moreMenu.contains(e.target)) {
+                    moreMenu.classList.remove('active');
+                }
+            });
+        }
     }
 }
 
@@ -74,14 +96,22 @@ export function setupPostActionListeners(post) {
 
 // 게시글 삭제하기
 async function handleDeletePost(postId) {
-    if (confirm("정말 삭제하시겠습니까?")) {
+    const confirmed = await window.toast.confirm(
+        "게시글 삭제",
+        "정말 삭제하시겠습니까?\n\n삭제한 게시글은 복구할 수 없습니다.",
+        { confirmText: "삭제", cancelText: "취소" }
+    );
+
+    if (confirmed) {
         try {
             await deletePost(postId);
-            alert('삭제되었습니다.');
-            window.location.href = '/index'; // 메인으로
+            window.toast.success('삭제되었습니다.');
+            setTimeout(() => {
+                window.location.href = '/index';
+            }, 1500);
         } catch (error) {
             console.error('삭제 실패:', error);
-            alert('삭제에 실패했습니다.');
+            window.toast.error('삭제에 실패했습니다.');
         }
     }
 }

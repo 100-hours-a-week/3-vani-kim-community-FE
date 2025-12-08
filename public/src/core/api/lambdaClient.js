@@ -2,7 +2,7 @@
 import { setupInterceptors } from './interceptors.js';
 
 const lambdaClient = axios.create({
-    baseURL: 'https://image.vanicommu.click',  // 또는 '/images'
+    baseURL: 'https://image.vanicommu.click',
     timeout: 10000,
     withCredentials: false
 });

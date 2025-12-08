@@ -1,11 +1,11 @@
 /**
  * 인증 상태 및 사용자 정보를 관리하는 전역 저장소
- * sessionStorage를 사용하여 탭 단위로 사용자 정보 관리
- * localStorage는 토큰 저장용으로만 사용
+ * localStorage를 사용하여 모든 탭에서 사용자 정보 공유
+ * 토큰과 사용자 정보 모두 localStorage에 저장
  */
 window.authStore = {
     /**
-     * 사용자 정보를 sessionStorage에 저장
+     * 사용자 정보를 localStorage에 저장
      * @param {Object} userData - 사용자 정보 객체
      * @param {number} userData.id - 사용자 ID
      * @param {string} userData.email - 사용자 이메일
@@ -18,15 +18,15 @@ window.authStore = {
             console.warn('authStore.setUser: userData가 제공되지 않았습니다.');
             return;
         }
-        sessionStorage.setItem('currentUser', JSON.stringify(userData));
+        localStorage.setItem('currentUser', JSON.stringify(userData));
     },
 
     /**
-     * sessionStorage에서 사용자 정보를 조회
+     * localStorage에서 사용자 정보를 조회
      * @returns {Object|null} 사용자 정보 객체 또는 null
      */
     getUser: function() {
-        const userData = sessionStorage.getItem('currentUser');
+        const userData = localStorage.getItem('currentUser');
         return userData ? JSON.parse(userData) : null;
     },
 
@@ -74,11 +74,11 @@ window.authStore = {
 
     /**
      * 모든 인증 관련 데이터를 삭제 (로그아웃 시 사용)
-     * - sessionStorage의 사용자 정보
+     * - localStorage의 사용자 정보
      * - localStorage의 액세스 토큰
      */
     clearAuth: function() {
-        sessionStorage.removeItem('currentUser');
+        localStorage.removeItem('currentUser');
         localStorage.removeItem('accessToken');
     },
 

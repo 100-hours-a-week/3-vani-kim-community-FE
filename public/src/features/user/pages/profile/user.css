@@ -1,182 +1,127 @@
-/* CSS for user.html */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Styles for the main authentication container layout */
+.auth-main {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
 }
 
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
-    line-height: 1.6;
-}
-
-main {
-    max-width: 500px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-    font-size: 1.75rem;
-}
-
-h3 {
-    margin: 20px 0 15px 0;
-    color: #555;
-    font-size: 1.2rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 8px;
-}
-
-#user-profile {
-    background: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-#user-profile div {
-    margin-bottom: 20px;
-}
-
-.image-uploader {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.image-upload-label {
-    display: inline-block;
-    cursor: pointer;
-    border-radius: 50%;
-    padding: 5px;
-    transition: opacity 0.2s ease;
-}
-
-.image-upload-label:hover {
-    opacity: 0.8;
-}
-
-#profile-image {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-    border: 3px solid #ddd;
-    transition: border-color 0.2s ease;
-}
-
-#profile-image:hover {
-    border-color: #007bff;
-}
-
-.visually-hidden {
-    display: none;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-}
-
-input[type="email"],
-input[type="password"],
-input[type="text"] {
+.auth-container {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    transition: border-color 0.2s ease;
+    max-width: 420px;
+    background-color: var(--background-light);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
 }
 
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="text"]:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+.auth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 32px;
 }
 
-input[readonly] {
-    background-color: #f8f9fa;
-    color: #6c757d;
+.auth-form input[readonly] {
+    background-color: #F1F5F9;
     cursor: not-allowed;
 }
 
 .readonly-note {
-    display: block;
-    margin-top: 5px;
-    font-size: 0.875rem;
-    color: #6c757d;
-    font-style: italic;
+    font-size: 0.8rem;
+    color: var(--body-text-color);
+    margin-top: 4px;
 }
 
-.password-section {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid #e9ecef;
-    margin-top: 20px;
-}
-
-.button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 30px;
-}
-
-button[type="submit"],
-button[type="button"] {
-    flex: 1;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
+.auth-button {
+    width: 100%;
+    padding: 14px 16px;
     border: none;
-    border-radius: 4px;
-    font-size: 16px;
+    border-radius: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    margin-top: 12px;
 }
 
-button[type="submit"]:hover,
-button[type="button"]:hover {
-    background-color: #0056b3;
+.auth-button:hover {
+    background-color: #dd6311;
 }
 
-#change-password {
-    background-color: #28a745;
+.form-footer {
+    text-align: center;
+    margin-top: 24px;
 }
 
-#change-password:hover {
-    background-color: #218838;
+.form-footer a {
+    color: var(--body-text-color);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
-    main {
-        margin: 10px;
-        padding: 10px;
-    }
-    
-    #user-profile {
-        padding: 20px;
-    }
-    
-    .button-group {
-        flex-direction: column;
-    }
-    
-    button[type="submit"],
-    button[type="button"] {
-        margin-bottom: 10px;
-    }
+.form-footer a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Image Uploader specific styles */
+.image-uploader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.image-upload-label {
+    position: relative;
+    cursor: pointer;
+}
+
+.image-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    object-fit: cover;
+    background-color: white;
+    transition: filter 0.2s ease;
+}
+
+.image-upload-label:hover .image-preview {
+    filter: brightness(0.9);
+}
+
+/* Default image state (when using placeholder) */
+.image-upload-label.default .image-preview {
+    filter: blur(2px) brightness(1.3);
+    opacity: 0.7;
+}
+
+.image-upload-label.default::after {
+    content: '+';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--primary-color);
+    pointer-events: none;
+}
+
+.image-upload-label.default:hover .image-preview {
+    filter: blur(2px) brightness(1.2);
+    opacity: 0.8;
+}
+
+/* Validation Message styles */
+.form-validation-message {
+    font-size: 0.875rem;
+    margin-top: 6px;
 }

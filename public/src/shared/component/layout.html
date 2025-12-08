@@ -1,29 +1,58 @@
-<link rel="stylesheet" type="text/css" href="/src/shared/component/header/header.css">
-<link rel="stylesheet" type="text/css" href="/src/shared/component/footer/footer.css">
+<!-- 
+  This file contains the shared HTML snippets that are loaded by layout.js 
+  and injected into the placeholder divs on each page.
+-->
 
+<!-- ======================= HEADER ======================= -->
 <div id="layout-header">
-    <nav>
-        <a href="javascript:history.back()" class="back-button">&lsaquo;</a>
-        <a href="/index" class="header-title">아무말말말말 대잔치</a>
-        <div class="header-user-menu">
-            <img src="/assets/user.png" alt="유저 이미지" id="user-menu-trigger" class="header-user-image">
-            <div class="dropdown-menu" id="user-dropdown">
-                <a href="/user/me">개인정보</a>
-                <a href="#" id="logout-button">로그아웃</a>
-            </div>
+    <header class="navbar">
+        <div class="navbar-container">
+            <a href="javascript:history.back()" class="back-button" id="back-button">&lsaquo;</a>
+            <a href="/" class="logo">
+                <i data-lucide="chef-hat" class="logo-icon"></i>
+                <span>밥상머리</span>
+            </a>
+            <nav class="navbar-right" id="navbar-right-content">
+                <!-- Logged Out View -->
+                <div id="logged-out-view" style="display: none;">
+                    <a href="/login" class="nav-link">로그인</a>
+                    <a href="/signup" class="write-button">회원가입</a>
+                </div>
+
+                <!-- Logged In View -->
+                <div id="logged-in-view" style="display: none;" class="navbar-right">
+                    <a href="/ruined" class="nav-link-special" id="special-page-link">
+                        <span class="inner-text">🔥 밥상 뒤집기</span>
+                    </a>
+                    <div class="search-bar" id="search-bar" style="display: none;">
+                        <input type="text" placeholder="레시피 검색...">
+                        <i data-lucide="search" class="search-icon"></i>
+                    </div>
+                    <a href="/post" class="write-button" id="write-button">글쓰기</a>
+                    <div class="header-user-menu" id="user-menu">
+                        <img src="/assets/images/user.png" alt="유저 이미지" id="user-menu-trigger" class="header-user-image">
+                        <div class="dropdown-menu" id="user-dropdown">
+                            <a href="/user/me">개인정보</a>
+                            <a href="#" id="logout-button">로그아웃</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
-    </nav>
+    </header>
 </div>
 
+
+<!-- ======================= FOOTER ======================= -->
 <div id="layout-footer">
     <footer>
         <div class="footer-container">
             <div class="footer-links">
-                <a href="/terms-of-service">이용약관</a>
-                <a href="/privacy-policy">개인정보 처리 방침</a>
+                <a href="#">이용약관</a>
+                <a href="#">개인정보 처리방침</a>
             </div>
             <div class="footer-info">
-                <p>&copy; 2025 아무말말말말 대잔치. All Rights Reserved.</p>
+                <p>&copy; 2025 밥상머리. All Rights Reserved.</p>
             </div>
         </div>
     </footer>

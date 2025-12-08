@@ -6,6 +6,23 @@ const port = process.env.PORT || 3000;
 
 // Routes
 
+// Main Routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/landing', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'landing.html'));
+});
+
+app.get('/ruined', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'ruined.html'));
+});
+
+app.get('/ruined-detail', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'ruined-detail.html'));
+});
+
 // Auth Routes
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'auth', 'pages', 'login', 'login.html'));
@@ -17,6 +34,10 @@ app.get('/signup', (req, res) => {
 
 // Post Routes
 app.get('/index', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/main', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -37,8 +58,8 @@ app.get('/user/me', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'user', 'pages', 'profile', 'user.html'));
 });
 
-app.get('/user/me/password', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'user', 'pages', 'settings', 'update-password.html'));
+app.get('/password', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'src', 'features', 'auth', 'pages', 'settings', 'update-password.html'));
 });
 
 app.get('/user/:userId', (req, res) => {
@@ -53,15 +74,11 @@ app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
-});
-
 const server = app.listen(port, () => {
     if (process.send) {
         process.send('ready');
     }
-    console.log(`Listening on port ${port}`);
+    console.log(`Server started on port ${port}`);
 });
 
 process.on('SIGINT', () => {

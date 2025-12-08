@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>상세보기 - 밥상 뒤집기</title>
+
+    <!-- Global & Layout CSS -->
+    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/src/shared/component/header/header.css">
+    <link rel="stylesheet" href="/src/shared/component/footer/footer.css">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="/ruined-detail.css">
+    <link rel="stylesheet" href="/src/shared/component/toast/toast.css">
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/lib/axios.min.js"></script>
+    <script src="/src/features/auth/authStore.js" defer></script>
+    <script type="module" src="/src/shared/component/toast/toast.js"></script>
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script type="module" src="/ruined-detail.script.js" defer></script>
+</head>
+<body class="ruined-detail-page">
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="detail-wrapper flipped" id="detail-wrapper">
+            <div class="detail-container">
+                <!-- 이미지 섹션 -->
+                <div class="detail-image-section">
+                    <img src="" alt="" class="detail-image" id="detail-image">
+                    <div class="detail-badge">💀 RUINED</div>
+                </div>
+
+                <!-- 콘텐츠 섹션 -->
+                <div class="detail-content-section">
+                    <div class="detail-header">
+                        <span class="detail-category" id="detail-category">카테고리</span>
+                        <h1 class="detail-title" id="detail-title">제목</h1>
+                        <div class="detail-meta">
+                            <span class="detail-author" id="detail-author">by 작성자</span>
+                            <div class="detail-stats">
+                                <span class="stat">
+                                    <i data-lucide="flame"></i>
+                                    <span id="detail-likes">0</span>
+                                </span>
+                                <span class="stat">
+                                    <i data-lucide="message-circle"></i>
+                                    <span id="detail-comments">0</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 간단 요약 -->
+                    <div class="detail-excerpt">
+                        <h3>무슨 일이 있었나요?</h3>
+                        <p id="detail-excerpt">간단한 설명...</p>
+                    </div>
+
+                    <!-- 상세 스토리 -->
+                    <div class="detail-story">
+                        <h3>참사의 전말</h3>
+                        <div id="detail-story-content" class="story-content">
+                            <!-- JavaScript로 채워짐 -->
+                        </div>
+                    </div>
+
+                    <!-- 플립 버튼 -->
+                    <div class="detail-actions">
+                        <button id="flip-btn" class="flip-btn">
+                            <i data-lucide="rotate-ccw"></i>
+                            <span>정상으로 보기</span>
+                        </button>
+                        <a href="/ruined" class="back-btn">
+                            <i data-lucide="arrow-left"></i>
+                            <span>목록으로</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+</body>
+</html>

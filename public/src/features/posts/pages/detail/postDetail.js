@@ -53,7 +53,7 @@ function setupLikeButton(postId, isLiked, likeCount) {
 
         } catch(error) {
             console.error("좋아요 처리 실패 :", error);
-            alert("좋아요 처리에 실패했습니다. 다시 시도해 주세요")
+            window.toast.error("좋아요 처리에 실패했습니다. 다시 시도해 주세요");
 
             currentIsLiked=previousIsLiked;
             currentLikeCount=previousLikeCount;
@@ -71,11 +71,26 @@ function setupLikeButton(postId, isLiked, likeCount) {
  * */
 function updateLikeUI(isLiked, count) {
     const likeButton = document.getElementById('like-button');
+    const likeIcon = likeButton.querySelector('.like-icon');
+    const likeText = likeButton.querySelector('.like-text');
     const likeCountSpan = document.getElementById("post-likes");
 
-    likeButton.textContent = isLiked ? '❤️ 좋아요 취소' : '🤍 좋아요';
     likeButton.classList.toggle('liked', isLiked);
-    likeCountSpan.textContent = `좋아요 ${count}`;
+
+    // 아이콘 업데이트
+    if (likeIcon) {
+        likeIcon.setAttribute('data-lucide', isLiked ? 'heart' : 'heart');
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+    }
+
+    // 텍스트 업데이트
+    if (likeText) {
+        likeText.textContent = isLiked ? '좋아요 취소' : '좋아요';
+    }
+
+    likeCountSpan.textContent = count;
 }
 
 //URL에서 게시글 아이디 가져오기

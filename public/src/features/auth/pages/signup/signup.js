@@ -1,6 +1,7 @@
 import { getPresignTempUrl, uploadToS3 } from "/src/shared/utils/imageApi.js"
 import { signup, emailCheck, nicknameCheck } from "/src/features/auth/api/authApi.js";
 import { renderImagePreview, isFileSizeValid } from "/src/shared/utils/fileUtils.js";
+import { showLoading, hideLoading, updateLoadingMessage } from "/src/shared/utils/loadingUtil.js";
 
 const signupButton = document.getElementById('signup-button');
 
@@ -22,6 +23,12 @@ const imagePreview = document.getElementById('image-preview');
 const DEFAULT_AVATAR_IMAGE = 'assets/user.png'
 const MAX_PROFILE_SIZE_MB = 10; //10MB
 
+// 초기 로드 시 기본 이미지 사용 중이므로 default 클래스 추가
+const imageLabel = imagePreview.closest('.image-upload-label');
+if (imageLabel) {
+    imageLabel.classList.add('default');
+}
+
 imageInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
 
@@ -32,7 +39,7 @@ imageInput.addEventListener('change', (event) => {
 
     //크기 검사 로직을 util 함수로 대체
     if (!isFileSizeValid(file,MAX_PROFILE_SIZE_MB)) {
-        alert(`파일 크기는 ${MAX_PROFILE_SIZE_MB} MB를 초과할 수 없습니다.`);
+        window.toast.warning(`파일 크기는 ${MAX_PROFILE_SIZE_MB} MB를 초과할 수 없습니다.`);
         imageInput.value = "";
         renderImagePreview(null, imagePreview, DEFAULT_AVATAR_IMAGE);
         return;
@@ -176,55 +183,67 @@ passwordConfirm.addEventListener('blur', async (e) => {
 document.getElementById('signup').addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    //사용자의 input가져오기
-    const emailValue = document.getElementById('email').value;
-    const passwordValue = document.getElementById('password').value;
-    const nicknameValue = document.getElementById('nickname').value;
+    // 즉시 로딩 표시
+    showLoading('회원가입 준비 중...');
 
-    //입력으로 받은 이미지파일
-    const imageFile = document.getElementById('image-input').files[0];
-    //이미지 처리
-    let profileImageKey = null;
-
-    if (imageFile) {
-        let presignedUrl;
-
-        //1. Presigned URL 요청(서버)
-        try {
-            //서버에 Presigned URL 요청
-            const presignedData = await getPresignTempUrl(
-                imageFile.name, imageFile.type, imageFile.size, "TEMP_PROFILE_IMAGE"
-            );
-
-            presignedUrl = presignedData.presignedUrl;
-            profileImageKey = presignedData.objectKey;
-        } catch (serverError) {
-            console.error('Presigned URL 요청 실패:', serverError);
-            // TODO: serverError.response.data.message 처럼 좀 더 구체적으로
-            alert('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
-            return;
-        }
-
-        //2. S3에 업로드
-        try {
-            await uploadToS3(presignedUrl, imageFile);
-
-        } catch (error) {
-            console.error('이미지 업로드 실패:', error);
-            alert('이미지 업로드 오류, 다시 시도해 주세요.');
-            return; // 회원가입 중단
-        }
-    }
-    //3. 서버에 업로드 성공한 imageKey와 함께 회원 가입 요청
     try {
+        //사용자의 input가져오기
+        const emailValue = document.getElementById('email').value;
+        const passwordValue = document.getElementById('password').value;
+        const nicknameValue = document.getElementById('nickname').value;
+
+        //입력으로 받은 이미지파일
+        const imageFile = document.getElementById('image-input').files[0];
+        //이미지 처리
+        let profileImageKey = null;
+
+        if (imageFile) {
+            let presignedUrl;
+
+            //1. Presigned URL 요청(서버)
+            try {
+                updateLoadingMessage('프로필 이미지 업로드 준비 중...');
+                //서버에 Presigned URL 요청
+                const presignedData = await getPresignTempUrl(
+                    imageFile.name, imageFile.type, imageFile.size, "TEMP_PROFILE_IMAGE"
+                );
+
+                presignedUrl = presignedData.presignedUrl;
+                profileImageKey = presignedData.objectKey;
+            } catch (serverError) {
+                console.error('Presigned URL 요청 실패:', serverError);
+                hideLoading();
+                // TODO: serverError.response.data.message 처럼 좀 더 구체적으로
+                window.toast.error('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
+                return;
+            }
+
+            //2. S3에 업로드
+            try {
+                updateLoadingMessage('프로필 이미지 업로드 중...');
+                await uploadToS3(presignedUrl, imageFile);
+
+            } catch (error) {
+                console.error('이미지 업로드 실패:', error);
+                hideLoading();
+                window.toast.error('이미지 업로드 오류, 다시 시도해 주세요.');
+                return; // 회원가입 중단
+            }
+        }
+        //3. 서버에 업로드 성공한 imageKey와 함께 회원 가입 요청
+        updateLoadingMessage('회원가입 처리 중...');
         const signupData = await signup(emailValue, passwordValue, nicknameValue, profileImageKey);
 
         // 페이지 이동
-        alert('회원가입 성공');
-        window.location.href = '/login';
+        updateLoadingMessage('완료! 로그인 페이지로 이동 중...');
+        window.toast.success('회원가입 성공!');
+        setTimeout(() => {
+            window.location.href = '/login';
+        }, 1500);
     } catch (error) {
         console.error('회원가입 실패:', error);
-        alert('회원가입에 실패했습니다.');
+        hideLoading();
+        window.toast.error('회원가입에 실패했습니다.');
     }
 });
 

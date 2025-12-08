@@ -1,0 +1,451 @@
+/* =================================
+   Ruined Page - Chaos & Humor Design
+   ================================= */
+
+/* 추가 컬러 변수 */
+:root {
+    --burnt-gray: #6B7280;
+    --warning-red: #EF4444;
+    --chaos-shadow: rgba(239, 68, 68, 0.2);
+}
+
+/* =================================
+   Splash Screen
+   ================================= */
+
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.splash-screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.bowl-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin-bottom: 24px;
+}
+
+.rice-bowl {
+    font-size: 120px;
+    animation: flip-bowl 2s ease-in-out;
+    display: inline-block;
+}
+
+@keyframes flip-bowl {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(180deg);
+    }
+}
+
+.falling-rice {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    height: 100%;
+}
+
+.rice-grain {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    font-size: 24px;
+    opacity: 0;
+    animation: fall 2s ease-in forwards;
+    animation-delay: var(--delay, 0s);
+}
+
+@keyframes fall {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, 0) rotate(0deg);
+    }
+    10% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+        transform: translate(calc(-50% + var(--x, 0)), 300px) rotate(720deg);
+    }
+}
+
+.splash-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* =================================
+   Ruined Page Overrides
+   ================================= */
+
+/* 뒤집힌 로고 */
+.ruined-page .logo span {
+    display: inline-block;
+    transform: rotate(180deg);
+    transition: transform 0.6s ease;
+}
+
+.ruined-page .logo:hover span {
+    transform: rotate(360deg);
+}
+
+/* =================================
+   Page Header
+   ================================= */
+
+.chaos-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.glitch {
+    position: relative;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--text-color);
+    margin-bottom: 16px;
+    animation: glitch-skew 3s infinite;
+}
+
+@keyframes glitch-skew {
+    0% {
+        transform: skew(0deg);
+    }
+    10% {
+        transform: skew(-2deg);
+    }
+    20% {
+        transform: skew(1deg);
+    }
+    30% {
+        transform: skew(-1deg);
+    }
+    40% {
+        transform: skew(0deg);
+    }
+    100% {
+        transform: skew(0deg);
+    }
+}
+
+.page-subtitle small {
+    color: var(--warning-red);
+    font-size: 0.875rem;
+}
+
+/* =================================
+   Ruined Grid
+   ================================= */
+
+.ruined-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+    perspective: 1000px;
+}
+
+@media (min-width: 640px) {
+    .ruined-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .ruined-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* =================================
+   Ruined Card
+   ================================= */
+
+.ruined-card {
+    position: relative;
+    height: 450px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    /* 기본 180도 회전 + 랜덤 회전 */
+    transform: rotate(180deg);
+}
+
+.ruined-card[data-rotation] {
+    transform: rotate(calc(180deg + var(--rotation, 0) * 1deg));
+}
+
+.ruined-card:hover {
+    transform: rotate(calc(180deg + var(--rotation, 0) * 1deg)) translateY(-10px);
+}
+
+.card-flipper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ruined-card.is-flipped .card-flipper {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    background: var(--background-light);
+    box-shadow: 0 8px 24px var(--chaos-shadow);
+    overflow: hidden;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%);
+}
+
+/* =================================
+   Card Front
+   ================================= */
+
+.card-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+    background: var(--burnt-gray);
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(1.3) contrast(1.1);
+    transition: transform 0.4s ease;
+}
+
+.ruined-card:hover .card-image {
+    transform: scale(1.1) rotate(2deg);
+}
+
+.card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--warning-red);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    animation: shake 2s ease-in-out infinite;
+}
+
+@keyframes shake {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+.card-content {
+    padding: 20px;
+}
+
+.card-category {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--secondary-color);
+    color: var(--primary-color);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.card-title {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 8px;
+    line-height: 1.3;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.card-author {
+    font-size: 0.875rem;
+    color: var(--body-text-color);
+    margin-bottom: 12px;
+}
+
+.card-stats {
+    display: flex;
+    gap: 16px;
+    padding: 16px 20px;
+    border-top: 2px dashed var(--border-color);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--warning-red);
+}
+
+.stat-item i {
+    width: 18px;
+    height: 18px;
+}
+
+/* =================================
+   Card Back
+   ================================= */
+
+.card-back-content {
+    padding: 40px;
+    text-align: center;
+}
+
+.card-back-content h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 16px;
+}
+
+.card-excerpt {
+    font-size: 1.125rem;
+    color: var(--body-text-color);
+    line-height: 1.7;
+    margin-bottom: 24px;
+}
+
+.detail-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
+}
+
+.detail-btn:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+}
+
+.detail-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+/* =================================
+   Footer Message
+   ================================= */
+
+.chaos-footer {
+    text-align: center;
+    padding: 40px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--burnt-gray);
+}
+
+/* =================================
+   Responsive Adjustments
+   ================================= */
+
+@media (max-width: 639px) {
+    .glitch {
+        font-size: 2rem;
+    }
+
+    .ruined-card {
+        height: 400px;
+    }
+
+    .card-image-wrapper {
+        height: 200px;
+    }
+
+    .card-title {
+        font-size: 1.125rem;
+    }
+}
+
+/* =================================
+   Chaos Scroll Effects (Optional)
+   ================================= */
+
+.ruined-card.chaos-shake {
+    animation: chaos-shake 0.5s ease-in-out;
+}
+
+@keyframes chaos-shake {
+    0%, 100% {
+        transform: rotate(calc(var(--rotation, 0) * 1deg)) translateX(0);
+    }
+    25% {
+        transform: rotate(calc(var(--rotation, 0) * 1deg)) translateX(-5px);
+    }
+    75% {
+        transform: rotate(calc(var(--rotation, 0) * 1deg)) translateX(5px);
+    }
+}

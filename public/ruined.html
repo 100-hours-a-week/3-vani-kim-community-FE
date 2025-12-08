@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>밥상 뒤집기 - 밥상머리</title>
+
+    <!-- Global & Layout CSS -->
+    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/src/shared/component/header/header.css">
+    <link rel="stylesheet" href="/src/shared/component/footer/footer.css">
+
+    <!-- Page-specific CSS -->
+    <link rel="stylesheet" href="/ruined.css">
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/assets/lib/axios.min.js"></script>
+    <script src="/src/features/auth/authStore.js" defer></script>
+    <script type="module" src="/src/shared/component/layout.js" defer></script>
+    <script type="module" src="/ruined.script.js" defer></script>
+</head>
+<body class="ruined-page">
+    <!-- 스플래시 스크린 -->
+    <div id="splash-screen" class="splash-screen active">
+        <div class="bowl-container">
+            <div class="rice-bowl">🍚</div>
+            <div class="falling-rice">
+                <span class="rice-grain" style="--delay: 0.1s; --x: 10px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.2s; --x: -15px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.15s; --x: 20px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.25s; --x: -5px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.3s; --x: 15px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.05s; --x: -20px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.2s; --x: 5px;">🍚</span>
+                <span class="rice-grain" style="--delay: 0.35s; --x: -10px;">🍚</span>
+            </div>
+        </div>
+        <p class="splash-text">밥상을 뒤집는 중...</p>
+    </div>
+
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="main-container ruined-container">
+            <!-- 페이지 헤더 (뒤집힌 느낌) -->
+            <div class="page-header chaos-header">
+                <h1 class="page-title glitch">밥상 뒤집기 🔥</h1>
+                <p class="page-subtitle">
+                    야심차게 시작했으나 처참하게 실패한 요리의 전당<br>
+                    <small>※ 엄마한테 혼날 뻔한 실화 모음</small>
+                </p>
+            </div>
+
+            <!-- 카드 그리드 -->
+            <div class="ruined-grid" id="ruined-grid">
+                <!-- JavaScript로 카드 생성됨 -->
+            </div>
+
+            <!-- 로딩 메시지 -->
+            <div class="chaos-footer">
+                <p>🔥 더 이상의 참사는 없습니다 🔥</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <!-- 카드 템플릿 -->
+    <template id="ruined-card-template">
+        <div class="ruined-card" data-id="" data-rotation="0">
+            <div class="card-flipper">
+                <!-- 앞면: 망한 요리 이미지 -->
+                <div class="card-front">
+                    <div class="card-image-wrapper">
+                        <img src="" alt="" class="card-image">
+                        <div class="card-badge">💀 RUINED</div>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category">카테고리</span>
+                        <h3 class="card-title">제목</h3>
+                        <p class="card-author">by 작성자</p>
+                    </div>
+                    <div class="card-stats">
+                        <span class="stat-item">
+                            <i data-lucide="flame"></i>
+                            <span class="stat-number">0</span>
+                        </span>
+                        <span class="stat-item">
+                            <i data-lucide="message-circle"></i>
+                            <span class="stat-number">0</span>
+                        </span>
+                    </div>
+                </div>
+                <!-- 뒷면: 간단한 설명 -->
+                <div class="card-back">
+                    <div class="card-back-content">
+                        <h4>무슨 일이...</h4>
+                        <p class="card-excerpt">설명</p>
+                        <button class="detail-btn">
+                            <span>상세보기</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</body>
+</html>

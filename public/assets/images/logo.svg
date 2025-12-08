@@ -1,0 +1,56 @@
+<svg width="100" height="100" viewBox="0 0 100 100"
+     xmlns="http://www.w3.org/2000/svg">
+
+    <!-- Bowl curve (rounded bottom) -->
+    <path
+            d="M 10 45
+       C 10 75, 30 85, 50 85
+       C 70 85, 90 75, 90 45"
+            fill="none"
+            stroke="#F97316"
+            stroke-width="8"
+            stroke-linecap="round"
+    />
+
+    <!-- Food -->
+    <path
+            d="M 20 40
+       C 40 25, 60 25, 80 40
+       C 60 35, 40 35, 20 40"
+            fill="#F97316"
+    />
+
+    <!-- Steam 1 -->
+    <path
+            d="M 35 25
+       C 33 21, 33 17, 35 13
+       C 37 9, 37 7, 35 5"
+            fill="none"
+            stroke="#F97316"
+            stroke-width="3"
+            stroke-linecap="round"
+    />
+
+    <!-- Steam 2 (center) -->
+    <path
+            d="M 50 27
+       C 48 22, 48 17, 50 12
+       C 52 8, 52 6, 50 4"
+            fill="none"
+            stroke="#F97316"
+            stroke-width="3"
+            stroke-linecap="round"
+    />
+
+    <!-- Steam 3 -->
+    <path
+            d="M 65 25
+       C 67 21, 67 17, 65 13
+       C 63 9, 63 7, 65 5"
+            fill="none"
+            stroke="#F97316"
+            stroke-width="3"
+            stroke-linecap="round"
+    />
+
+</svg>
