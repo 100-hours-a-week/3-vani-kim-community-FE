@@ -1,6 +1,7 @@
 import { getPost, updatePost } from "/src/features/posts/api/postApi.js";
 import { getPresignUrl, uploadToS3 } from "/src/shared/utils/imageApi.js";
 import { renderImagePreview, isFileSizeValid } from "/src/shared/utils/fileUtils.js";
+import { showLoading, hideLoading, updateLoadingMessage } from "/src/shared/utils/loadingUtil.js";
 
 // URL에서 게시글 ID 가져오기
 const path = window.location.pathname;
@@ -117,22 +118,19 @@ document.getElementById('update-post-form').addEventListener('submit', async (ev
 
     const title = document.getElementById('title').value.trim();
     const content = document.getElementById('content').value.trim();
-    const updateBtn = document.getElementById('update-btn');
 
     if (!title) {
-        alert('제목을 입력해주세요.');
+        window.toast.warning('제목을 입력해주세요.');
         return;
     }
 
     if (!content) {
-        alert('내용을 입력해주세요.');
+        window.toast.warning('내용을 입력해주세요.');
         return;
     }
 
-    // 로딩 상태 표시
-    const originalBtnText = updateBtn.textContent;
-    updateBtn.disabled = true;
-    updateBtn.textContent = '수정 중...';
+    // 즉시 로딩 표시
+    showLoading('게시글 수정 준비 중...');
 
     try {
         let postImageKey = null;
@@ -141,6 +139,7 @@ document.getElementById('update-post-form').addEventListener('submit', async (ev
         if (newImageFile) {
             // 새 이미지를 업로드하는 경우
             try {
+                updateLoadingMessage('이미지 업로드 준비 중...');
                 const presignedData = await getPresignUrl(
                     newImageFile.name,
                     newImageFile.type,
@@ -148,14 +147,14 @@ document.getElementById('update-post-form').addEventListener('submit', async (ev
                     "POST_IMAGE"
                 );
 
+                updateLoadingMessage('이미지 업로드 중...');
                 await uploadToS3(presignedData.presignedUrl, newImageFile);
                 postImageKey = presignedData.objectKey;
 
             } catch (error) {
                 console.error('이미지 업로드 실패:', error);
-                alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
-                updateBtn.disabled = false;
-                updateBtn.textContent = originalBtnText;
+                hideLoading();
+                window.toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
                 return;
             }
         } else if (!isCurrentImageRemoved && currentPost.contentDetail.postImageUrl) {
@@ -175,25 +174,26 @@ document.getElementById('update-post-form').addEventListener('submit', async (ev
 
         // 게시글 수정 API 호출
         // postImageKey가 undefined인 경우 서버에서 기존 이미지를 유지하도록 처리
+        updateLoadingMessage('게시글 수정 중...');
         const updatedPost = await updatePost(postId, title, content, postImageKey ?? undefined);
 
-        alert('게시글이 수정되었습니다.');
-        window.location.href = `/post/${postId}`;
+        updateLoadingMessage('완료! 이동 중...');
+        window.toast.success('게시글이 수정되었습니다.');
+        setTimeout(() => {
+            window.location.href = `/post/${postId}`;
+        }, 1000);
 
     } catch (error) {
         console.error('게시글 수정 실패:', error);
+        hideLoading();
 
         if (error.response && error.response.status === 403) {
-            alert('게시글 수정 권한이 없습니다.');
+            window.toast.error('게시글 수정 권한이 없습니다.');
         } else if (error.response && error.response.status === 404) {
-            alert('게시글을 찾을 수 없습니다.');
+            window.toast.error('게시글을 찾을 수 없습니다.');
         } else {
-            alert('게시글 수정에 실패했습니다. 다시 시도해주세요.');
+            window.toast.error('게시글 수정에 실패했습니다. 다시 시도해주세요.');
         }
-    } finally {
-        // 로딩 상태 해제
-        updateBtn.disabled = false;
-        updateBtn.textContent = originalBtnText;
     }
 });
 

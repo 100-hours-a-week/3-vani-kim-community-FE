@@ -2,6 +2,7 @@ import {getUser, withdrawUser, updateUser} from "/src/features/user/api/userApi.
 import {nicknameCheck} from "/src/features/auth/api/authApi.js";
 import { getPresignUrl, uploadToS3 } from "/src/shared/utils/imageApi.js";
 import { renderImagePreview, isFileSizeValid } from "/src/shared/utils/fileUtils.js";
+import { showLoading, hideLoading, updateLoadingMessage } from "/src/shared/utils/loadingUtil.js";
 
 const DEFAULT_AVATAR_IMAGE = '/assets/images/user.png';
 const MAX_PROFILE_SIZE_MB = 10; // 10MB
@@ -99,49 +100,58 @@ nicknameInput.addEventListener('blur', async (e) => {
 document.getElementById('user-profile-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const nicknameValue = nicknameInput.value;
-    const imageFile = imageInput.files[0];
-    let profileImageKey = null;
+    // 즉시 로딩 표시
+    showLoading('프로필 수정 준비 중...');
 
-    // 이미지 파일이 선택된 경우에만 업로드
-    if (imageFile) {
-        let presignedUrl;
-
-        // 1. Presigned URL 요청
-        try {
-            const presignedData = await getPresignUrl(
-                imageFile.name,
-                imageFile.type,
-                imageFile.size,
-                "PROFILE_IMAGE"
-            );
-
-            presignedUrl = presignedData.presignedUrl;
-            profileImageKey = presignedData.objectKey;
-        } catch (serverError) {
-            console.error('Presigned URL 요청 실패:', serverError);
-            window.toast.error('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
-            return;
-        }
-
-        // 2. S3에 업로드
-        try {
-            await uploadToS3(presignedUrl, imageFile);
-        } catch (error) {
-            console.error('이미지 업로드 실패:', error);
-            window.toast.error('이미지 업로드 오류, 다시 시도해 주세요.');
-            return;
-        }
-    }
-
-    // 3. 프로필 업데이트 API 호출
     try {
+        const nicknameValue = nicknameInput.value;
+        const imageFile = imageInput.files[0];
+        let profileImageKey = null;
+
+        // 이미지 파일이 선택된 경우에만 업로드
+        if (imageFile) {
+            let presignedUrl;
+
+            // 1. Presigned URL 요청
+            try {
+                updateLoadingMessage('프로필 이미지 업로드 준비 중...');
+                const presignedData = await getPresignUrl(
+                    imageFile.name,
+                    imageFile.type,
+                    imageFile.size,
+                    "PROFILE_IMAGE"
+                );
+
+                presignedUrl = presignedData.presignedUrl;
+                profileImageKey = presignedData.objectKey;
+            } catch (serverError) {
+                console.error('Presigned URL 요청 실패:', serverError);
+                hideLoading();
+                window.toast.error('이미지 업로드 준비에 실패했습니다. (파일 크기/타입 확인)');
+                return;
+            }
+
+            // 2. S3에 업로드
+            try {
+                updateLoadingMessage('프로필 이미지 업로드 중...');
+                await uploadToS3(presignedUrl, imageFile);
+            } catch (error) {
+                console.error('이미지 업로드 실패:', error);
+                hideLoading();
+                window.toast.error('이미지 업로드 오류, 다시 시도해 주세요.');
+                return;
+            }
+        }
+
+        // 3. 프로필 업데이트 API 호출
+        updateLoadingMessage('프로필 업데이트 중...');
         await updateUser(nicknameValue, profileImageKey);
 
         // 서버에서 최신 사용자 정보를 가져와 authStore 업데이트
         const updatedUser = await getUser();
         window.authStore.setUser(updatedUser);
 
+        updateLoadingMessage('완료! 페이지 새로고침 중...');
         window.toast.success('프로필이 성공적으로 업데이트되었습니다!');
 
         setTimeout(() => {
@@ -149,6 +159,7 @@ document.getElementById('user-profile-form').addEventListener('submit', async (e
         }, 1500);
     } catch (error) {
         console.error('프로필 업데이트 실패:', error);
+        hideLoading();
         window.toast.error('프로필 업데이트에 실패했습니다.');
     }
 });
