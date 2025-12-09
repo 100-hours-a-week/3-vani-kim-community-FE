@@ -1,7 +1,7 @@
 import { renderPost, setupPostActionListeners } from '/src/features/posts/pages/detail/post.js'
 import { getPost, getPosts} from "/src/features/posts/api/postApi.js";
 import { createComment, getComments } from "/src/features/comments/api/commentsApi.js";
-import { handleCommentClick, renderComment, setupCommentForm } from "/src/features/posts/pages/detail/commentSection.js";
+import { handleCommentClick, renderComment, setupCommentForm, initInfiniteScroll } from "/src/features/posts/pages/detail/commentSection.js";
 import { like } from "/src/features/posts/api/interactionApi.js";
 document.addEventListener("DOMContentLoaded", function (){
 
@@ -111,16 +111,20 @@ async function initPage() {
                 console.log('세션데이터 이용');
                 post = tempPost;
                 sessionStorage.removeItem("tempPost");
-                commentData = {items : [] }
+                commentData = {items : [], nextCursor: null, hasMore: false }
             }
         }
         if (!post) {
             console.log("API 호출 (Promise.all)");
             [post, commentData] = await Promise.all([
                 getPost(postId),
-                getComments(postId)
+                getComments(postId, null, null, 20) // 첫 페이지: 20개씩
             ]);
         }
+
+        console.log('[댓글 초기 로드] commentData:', commentData);
+        console.log('[댓글 초기 로드] nextCursor:', commentData.nextCursor);
+        console.log('[댓글 초기 로드] hasMore:', commentData.hasMore);
 
         renderPost(post);
 
@@ -130,7 +134,8 @@ async function initPage() {
 
         const fragment = new DocumentFragment();
 
-        const commentArray = commentData.items;
+        const commentArray = commentData.items || [];
+        console.log(`[댓글 초기 로드] 댓글 ${commentArray.length}개 렌더링`);
 
         commentArray.forEach(comment => {
             const commentElement = renderComment(comment);
@@ -143,6 +148,14 @@ async function initPage() {
         commentListContainer.addEventListener('click', handleCommentClick);
 
         setupCommentForm(postId);
+
+        // 무한 스크롤 초기화 - nextCursor를 cursor 형식으로 변환
+        const cursor = commentData.nextCursor ? {
+            cursorId: commentData.nextCursor.id,
+            cursorCreatedAt: commentData.nextCursor.createdAt
+        } : null;
+
+        initInfiniteScroll(postId, cursor);
     } catch (err) {
         console.error("페이지 로딩 실패:", err);
         document.getElementById("comment-list").innerHTML = "<p>댓글 목록을 불러오는데 실패했습니다.</p>";

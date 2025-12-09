@@ -50,7 +50,7 @@ export function renderComment(comment) {
 
 /**
  * 댓글의 액션 버튼 클릭을 다루는 함수
- * @param event : 클릭이벤트
+ * @param event : click event
  * */
 export function handleCommentClick(event) {
     const clickedElement = event.target;
@@ -240,19 +240,27 @@ function cancelCommentEdit(commentLi, originalContent) {
     commentContentDiv.textContent = originalContent;
 }
 
+// 무한 스크롤 상태 관리
+let currentPostId = null;
 let currentCursor = null;
 let isloading = false;
 let hasMore = true;
-let observer;
+let observer = null;
 
 /**
  * 댓글 목록의 무한스크롤을 담당하는 함수, 다음 커서에 대한 댓글들을 불러옴
  * */
 async function loadNextPage() {
+    console.log('[무한스크롤] loadNextPage 시작', { isloading, hasMore, currentCursor });
+
     // 이미 로딩중이거나, 더이상 데이터 없다면 중단
-    if (isloading||!hasMore) return;
+    if (isloading || !hasMore || !currentCursor) {
+        console.log('[무한스크롤] loadNextPage 중단:', { isloading, hasMore, currentCursor });
+        return;
+    }
 
     isloading = true;
+    console.log('[무한스크롤] 로딩 시작');
 
     // 로딩 인디케이터 표시
     const trigger = document.getElementById('infinite-scroll-trigger');
@@ -261,16 +269,65 @@ async function loadNextPage() {
     }
 
     try {
-        const { comments: newComments } = await getComments(currentCursor);
-        if (newComments === 0) {
+        // API 호출: postId, cursorId, cursorCreatedAt, size
+        console.log('[무한스크롤] API 호출:', {
+            postId: currentPostId,
+            cursorId: currentCursor.cursorId,
+            cursorCreatedAt: currentCursor.cursorCreatedAt,
+            size: 20
+        });
+
+        const commentData = await getComments(
+            currentPostId,
+            currentCursor.cursorId,
+            currentCursor.cursorCreatedAt,
+            20 // 한 페이지당 20개씩
+        );
+
+        console.log('[무한스크롤] API 응답:', commentData);
+
+        const newComments = commentData.items || [];
+
+        if (newComments.length === 0) {
+            console.log('[무한스크롤] 더 이상 댓글 없음');
             hasMore = false;
+            if (trigger) {
+                trigger.style.display = 'none';
+            }
         } else {
-            //TODO 댓글 렌더하는 로직
+            console.log(`[무한스크롤] 댓글 ${newComments.length}개 렌더링`);
+            // 댓글 렌더링
+            const commentListContainer = document.getElementById('comment-list');
+            const fragment = document.createDocumentFragment();
+
+            newComments.forEach(comment => {
+                const commentElement = renderComment(comment);
+                fragment.appendChild(commentElement);
+            });
+
+            commentListContainer.appendChild(fragment);
+
+            // 다음 커서 업데이트 - nextCursor를 cursorId/cursorCreatedAt 형식으로 변환
+            if (commentData.nextCursor && commentData.hasMore) {
+                console.log('[무한스크롤] 다음 커서 업데이트:', commentData.nextCursor);
+                currentCursor = {
+                    cursorId: commentData.nextCursor.id,
+                    cursorCreatedAt: commentData.nextCursor.createdAt
+                };
+            } else {
+                console.log('[무한스크롤] 다음 커서 없음, 종료');
+                hasMore = false;
+                if (trigger) {
+                    trigger.style.display = 'none';
+                }
+            }
         }
     } catch (error) {
-        console.error("다음 페이지 로딩 실패: ", error);
+        console.error("[무한스크롤] 다음 페이지 로딩 실패: ", error);
+        window.toast.error('댓글을 불러오는데 실패했습니다.');
     } finally {
         isloading = false;
+        console.log('[무한스크롤] 로딩 완료');
         // 로딩 인디케이터 제거
         if (trigger) {
             trigger.classList.remove('loading');
@@ -279,27 +336,72 @@ async function loadNextPage() {
 }
 
 /**
- * 무한페이징을 위한 옵저버 함수, 앵커 10이상부터 콜백
+ * 무한페이징을 위한 옵저버 함수, 앵커 10% 이상부터 콜백
  * */
 function createObserver() {
     const trigger = document.getElementById('infinite-scroll-trigger');
+
+    if (!trigger) {
+        console.error('[무한스크롤] Trigger 요소를 찾을 수 없음');
+        return;
+    }
+
+    console.log('[무한스크롤] Observer 생성 완료, trigger 요소:', trigger);
 
     const option = {
         root: null, // null이면 뷰포트 전체
         threshold: 0.1 // 앵커가 10%만 보여도 콜백 실행
     };
 
-    const callback = (entries, observer) => {
+    const callback = (entries) => {
         entries.forEach(entry => {
+            console.log('[무한스크롤] Observer 콜백 실행', {
+                isIntersecting: entry.isIntersecting,
+                hasMore,
+                isloading,
+                currentCursor
+            });
+
             // 앵커(entry.target)이 화면에 보인다면
-            if (entry.isIntersecting) {
+            if (entry.isIntersecting && hasMore && !isloading) {
+                console.log('[무한스크롤] loadNextPage 호출');
                 loadNextPage();
             }
         });
     };
 
-    const observer = new IntersectionObserver(callback, option);
+    observer = new IntersectionObserver(callback, option);
     observer.observe(trigger);
+    console.log('[무한스크롤] Observer observe 시작');
+}
+
+/**
+ * 무한 스크롤 초기화 함수
+ * @param postId : 게시글 ID
+ * @param initialCursor : 초기 커서 (첫 페이지 응답에서 받은 cursor)
+ */
+export function initInfiniteScroll(postId, initialCursor) {
+    console.log('[무한스크롤] 초기화 시작', { postId, initialCursor });
+
+    currentPostId = postId;
+    currentCursor = initialCursor;
+    hasMore = !!initialCursor; // cursor가 있으면 더 불러올 데이터가 있음
+
+    console.log('[무한스크롤] 상태:', { currentPostId, currentCursor, hasMore });
+
+    const trigger = document.getElementById('infinite-scroll-trigger');
+    if (trigger) {
+        if (hasMore) {
+            trigger.style.display = 'flex';
+            console.log('[무한스크롤] 트리거 표시 및 Observer 생성');
+            createObserver();
+        } else {
+            trigger.style.display = 'none';
+            console.log('[무한스크롤] 더 이상 로드할 댓글 없음');
+        }
+    } else {
+        console.error('[무한스크롤] 트리거 요소를 찾을 수 없음');
+    }
 }
 
 /**

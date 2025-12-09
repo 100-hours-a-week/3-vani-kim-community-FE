@@ -550,6 +550,11 @@
     height: 20px;
     margin-top: 20px;
     position: relative;
+    display: none;
+}
+
+.infinite-scroll .loading-text {
+    display: none;
 }
 
 .infinite-scroll.loading {
@@ -560,12 +565,20 @@
     justify-content: center;
 }
 
+.infinite-scroll.loading .loading-text {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-left: 35px;
+}
+
 .infinite-scroll.loading::before {
     content: '';
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    margin-left: -40px;
     width: 24px;
     height: 24px;
     border: 3px solid var(--border-color);
