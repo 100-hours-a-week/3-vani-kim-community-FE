@@ -20,7 +20,7 @@
 **밥상머리**는 소중한 사람들의 레시피를 기록하고 추억을 공유하는 커뮤니티 서비스입니다.
 프레임워크(React, Vue 등)의 도움 없이 **Vanilla JS**와 **Express.js**를 활용하여 SPA(Single Page Application)와 유사한 사용자 경험을 직접 구현하며 웹의 본질적인 동작 원리를 깊이 있게 학습했습니다.
 
-- **개발 기간:** 2025.10.16 ~ 2024.12.08 and Continue
+- **개발 기간:** 2025.10.16 ~ 2025.12.08 and Continue
 - **개발 인원:** 1인 (Full-stack)
 - **배포 URL:** [밥상머리 바로가기](https://vanicommu.click/landing)
 - **관련 리포지토리:** [Back-end Github 바로가기](https://github.com/100-hours-a-week/3-vani-kim-community-BE)
